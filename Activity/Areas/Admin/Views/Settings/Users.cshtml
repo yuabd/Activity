@@ -1,0 +1,187 @@
+﻿@model IEnumerable<Activity.Models.User>
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head {
+    <script src="/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+
+	$(function () {
+		$("#add").button({ icons: { primary: 'ui-icon-plus'} });
+		$("#add-form").dialog({ autoOpen: false, modal: true, title: 'Add User', width: 550 });
+		$("#add")
+			.click(function () {
+				removeRoleSelect();
+				$("#UserID").val("").removeAttr("disabled");
+				$("#IsActive").attr("checked", "checked");
+				$("#_userID").val("");
+				$("#Password").val("");
+				$("#add-form").dialog("open");
+				$("#add-form").dialog({ title: 'Add User' });
+			});
+
+		$("#UserForm").validate({
+				rules: {
+					UserID: { required: true, maxlength: 15, remote: '/Admin/Settings/CheckUser' },
+					Password:{required: true}
+				},
+				messages: {
+					UserID: {
+						required: "<span style='color: red; margin-left: 10px;'>Required</span>",
+						maxlength: "<span style='color: red; margin-left: 10px;'>Maxlength is 15</span>",
+						remote: "<span style='color: red; margin-left: 10px;'>Already Exist</span>"
+					},
+					Password:{required: "<span style='color: red; margin-left: 10px;'>Required</span>"}
+				}
+			});
+		});
+
+	function showRole(role) {
+		$("#" + role).attr("checked", "checked");
+	}
+
+	function removeRoleSelect() {
+		@foreach (var item in Activity.Helpers.ListHelper.GetRoleList())
+  {
+			<text>$("#@item.Text").removeAttr("checked");</text>
+  }
+	}
+
+	function Edit(userID, password, isActive) {
+		removeRoleSelect();
+		$.post("/Admin/settings/GetUserRoles", { id: userID }, function (data) {
+			data.forEach(showRole);
+		});
+		$("#UserID").attr("disabled", "disabled").val(userID);
+		$("#_userID").val(userID);
+		$("#Password").val(password);
+		if (isActive == "True")
+			$("#IsActive").attr("checked", "checked");
+		$("#add-form").dialog("open");
+		$("#add-form").dialog({ title: '编辑用户' });
+	};
+    </script>
+}
+@*<div id="add-form">
+	<br />
+	<form action="/Admin/Settings/Users" method="post" id="UserForm">
+		<input type="hidden" value="" id="_userID" name="_userID" />
+		<div class="row">
+			<label>用户名:</label>
+			@Html.TextBox("UserID")
+		</div>
+		<div class="row">
+			<label>密码:</label>
+			@Html.Password("Password")
+		</div>
+		 <div class="row" style="display: none;">
+			<label>权限:</label>
+			@{
+				foreach (var item in Activity.Helpers.ListHelper.GetRoleList())
+				{
+					<input id="@item.Text" name="UserRole" value="@item.Value" type="checkbox" /> @item.Text
+				}
+			 }
+		 </div>
+		<div class="row">
+			<label>激活:</label>
+			@Html.CheckBox("IsActive")
+		</div>
+		<p><button type="submit">Save</button> or <a href="#" onclick="$('#add-form').dialog('close');">Cancel</a></p>
+	</form>
+</div>*@
+<div id="add-form">
+    <br />
+    <form action="/Admin/Settings/Users" method="post" id="UserForm">
+    <input type="hidden" value="" id="_userID" name="_userID" />
+    <div class="row">
+        <label>
+            用户名:</label>
+        @Html.TextBox("UserID")
+    </div>
+    <div class="row">
+        <label>
+            密码:</label>
+        @Html.Password("Password")
+    </div>
+    <div class="row" style="display: none;">
+        <label>
+            权限:</label>
+        @{
+            foreach (var item in Activity.Helpers.ListHelper.GetRoleList())
+            {
+            <input id="@item.Text" name="UserRole" value="@item.Value" type="checkbox" /> @item.Text
+            }
+        }
+    </div>
+    <div class="row">
+        <label>
+            激活:</label>
+        @Html.CheckBox("IsActive")
+    </div>
+    <p>
+        <button type="submit">
+            Save</button>
+        or <a href="javascript:void(0);" onclick="$('#add-form').dialog('close');">Cancel</a></p>
+    </form>
+</div>
+<h2>
+    用户列表</h2>
+<p>@*<a href="#" id="add">新增</a>*@</p>
+<table class="grid">
+    <tr>
+        <th>
+            序号
+        </th>
+        <th>
+            用户名
+        </th>
+        <th>
+            姓名
+        </th>
+        <th>
+            单位
+        </th>
+        <th>
+            联系方式
+        </th>
+        <th>
+            创建时间
+        </th>
+        <th>
+            最后登陆时间
+        </th>
+        @*<th>激活</th>*@
+        <th>
+        </th>
+    </tr>
+    @{int i = Model.Count();}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@i
+            </td>
+            <td>@item.UserID
+            </td>
+            @*<td>@foreach (var m in item.UserRoleJoins) { <text>@m.RoleID&nbsp;</text> }</td>*@
+            <td>@item.Name
+            </td>
+            <td>@item.City
+            </td>
+            <td>@item.Contact
+            </td>
+            <td>@item.DateCreated
+            </td>
+            <td>@item.DateLastLogin
+            </td>
+            @*<td><input type="checkbox" disabled="disabled" @(item.IsActive ? "checked='checked'":"") /></td>*@
+            <td class="actions">
+                <a href="javascript:void(0);" onclick="Edit('@item.UserID','@item.Password.Substring(0, 10)','@item.IsActive')">
+                    编辑</a> | <a href="/admin/settings/profiles/@item.UserID">查看资料</a> | <a href="/Admin/Settings/DeleteUser/@item.UserID">
+                        删除</a>
+            </td>
+        </tr> 
+                                                                                                                       i--;
+    }
+</table>

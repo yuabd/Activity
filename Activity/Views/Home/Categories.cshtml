@@ -1,0 +1,234 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Active>
+@{
+    ViewBag.Title = "活动列表";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@section scripts{
+    <script>
+        function Show(id, backup) {
+            if ('@User.Identity.IsAuthenticated' != 'True') {
+                alert('请先登录!');
+                window.location = '/Login';
+                return false;
+            }
+            HammerAjax('/Home/CheckActive', { id: id }, function (data) {
+                if (data.Tag != 1) {
+                    alert(data.Message);
+                    return false;
+                }
+                else {
+                    $("#ActiveID").val(id);
+                    $("#Backup").val(backup);
+                    HammerAjax('/Login/UserInfo', { id: id }, function (data) {
+                        $("#Name").val(data.UserID);
+                        $("#Contact").val(data.Contact);
+                        $("#remind").html(data.Remind);
+                    });
+
+                    $("#applyForm").show();
+                }
+            });
+        }
+
+        function Hide() {
+            $("#applyForm").hide();
+        }
+        function apply(id) {
+            if (!$.validatebox.valid()) {
+                return;
+            }
+
+            var postData = getFormJson($('#applyForm'));
+
+            HammerAjax('/home/apply', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("报名成功!");
+                    location.reload();
+                }
+                else {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}
+@Html.Partial("_ApplyForm")
+<div class="indexLert">
+    <div class="submenu">
+        @Html.Partial("MenuList")
+    </div>
+</div>
+<div class="content">
+    <div class="leftBox">
+        <h3 class="cateTitle">
+            @*活动分类*@
+        </h3>
+        <div class="likeTit">
+            <a style="color: #B2B2B2" href="#">热门活动标签</a>：
+            @foreach (var item in Activity.Helpers.ListHelper.GetTags())
+            {
+                <a href="/home/categories?tag=@item" class="tag mb10 green" title="@item">@item</a>
+            }
+            <a href="/home/tags" title="更多">更多</a>
+        </div>
+        <div style="width: 681px; background: #f2f2f2; overflow: hidden; padding: 10px;">
+            <div class="sequence">
+                <em><a href="/home/categories" class="on">全部</a></em> <em><a href="/home/Categories/@ViewBag.CategoryID?date=1">
+                    今天</a></em> <em><a href="/home/Categories/@ViewBag.CategoryID?date=2">明天</a></em>
+                <em><a href="/home/Categories/@ViewBag.CategoryID?date=7">一周</a></em> <em><a href="/home/Categories/@ViewBag.CategoryID?date=30">
+                    一个月</a></em>
+            </div>
+            @foreach (var item in Model)
+            {
+                int? count = item.Applies.Where(m => m.Backup == "N").Sum(m => m.People ?? 0);
+                int? backupCount = item.Applies.Where(m => m.Backup == "Y").Sum(m => m.People ?? 0);
+                int? voluteerCount = item.Applies.Where(m => m.Backup == "V").Sum(m => m.People ?? 0);
+                <div class="list-active">
+                    <div class="imgBox">
+                        <em><a href="/home/detail/@item.ActiveID" target="_blank" title="@item.Title">
+                            <img src="@item.PictureFolder/@item.PictureFile"
+								     alt="@item.Title" title="@item.Title" style="width: 83px;">
+                        </a></em>
+                        <div class="btn_yellow mt10">
+                            @if (item.AlreadyApply == "N")
+                            {
+                                if (voluteerCount >= item.VolunteerCount)
+                                {
+                                    if (item.People > count)
+                                    {
+                                <a href="javascript:void(0)" onclick=" Show('@item.ActiveID', 'N') "><span>报名</span>
+                                </a>
+                                    }
+                                    else
+                                    {
+                                        int acount = Convert.ToInt32(item.People * 0.15);
+                                        if (acount > backupCount)
+                                        {
+                                <a href="javascript:void(0)"  onclick=" Show('@item.ActiveID', 'Y') "><span>候选人员报名</span>
+                                </a>
+                                        }
+                                        else
+                                        {
+                                <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                <a href="javascript:void(0)"  onclick=" Show('@item.ActiveID', 'V') "><span>志愿者报名</span>
+                                </a>
+                                }
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0);"><span>您已报名！</span></a>
+                            }
+                            @*@if (item.Status == "Normal")
+                            {
+                                if (item.EndDate >= DateTime.Now.AddDays(1))
+                                {
+                                    if (item.People > count)
+                                    {
+                                        if (item.AlreadyApply == "N")
+                                        {
+                                <a href="javascript:void(0)" onclick=" Show('@item.ActiveID', 'N') "><span>进行中,报名</span>
+                                </a>
+                                        }
+                                        else
+                                        {
+                                <a href="javascript:void(0)"><span>进行中,已报名</span> </a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        int acount = Convert.ToInt32(item.People * 0.15);
+                                        if (acount > backupCount)
+                                        {
+                                <a href="javascript:void(0)"  onclick=" Show('@item.ActiveID', 'Y') "><span>候选人员报名</span>
+                                </a>
+                                        }
+                                        else
+                                        {
+                                <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                        }
+
+                                    }
+                                }
+                                else
+                                {
+                                <a href="javascript:void(0)"><span>活动进行中</span> </a>
+                                }
+
+                            }
+                            else if (item.Status == "End")
+                            {
+                                <a href="javascript:void(0)"><span>活动已结束</span> </a>
+                            }
+                            else
+                            {
+                                if (item.People > count)
+                                {
+                                    if (item.AlreadyApply == "N")
+                                    {
+                                <a href="javascript:void(0)" onclick=" Show('@item.ActiveID', 'N') "><span>报名</span>
+                                </a>
+                                    }
+                                    else
+                                    {
+                                <a href="javascript:void(0)"><span>已报名</span> </a>
+                                    }
+                                }
+                                else
+                                {
+                                    int acount = Convert.ToInt32(item.People * 0.15);
+                                    if (acount > backupCount)
+                                    {
+                                <a href="javascript:void(0)"  onclick=" Show('@item.ActiveID', 'Y') "><span>候选人员报名</span>
+                                </a>
+                                    }
+                                    else
+                                    {
+                                <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                    }
+                                }
+                            }*@
+                        </div>
+                    </div>
+                    <div class="conBox">
+                        <span>
+                            @if (item.Status == "NoStart")
+                            {
+                                <span style="color: red;">【报名中】</span>
+                            }
+                            else if (item.Status == "Normal")
+                            {
+                                <span style="color: Fuchsia;">【活动进行中】</span>
+                            }
+                            else if (item.Status == "End")
+                            {
+                                <span style="color: Olive;">【已结束】</span>
+                            }
+                            <a href="/home/detail/@item.ActiveID" target="_blank" title="@item.Title">
+                                @item.Title</a></span><br />
+                        地点：@item.Address<br />
+                        时间：@(((DateTime)item.StartDate).ToShortDateString())—@(((DateTime)item.EndDate).ToShortDateString())<br />
+                        人数：@item.People<br />
+                        经费：@item.Price<br />
+                        浏览量：@item.PageVisits<br />
+                        <em>标签：
+                            @foreach (var tag in item.TagJoins)
+                            {
+                                <a href="/home/categories?tag=@tag.Tag" title="@tag.Tag">@tag.Tag</a>
+                            }
+                        </em>
+                    </div>
+                    <div class="scoreBox">
+                        <span class="people">@count/@item.People</span> <span class="exp">报名人数</span>
+                    </div>
+                </div>
+            }
+            @Model.Pager("pager")
+        </div>
+    </div>
+    @Html.Partial("_Sidebar")
+</div>

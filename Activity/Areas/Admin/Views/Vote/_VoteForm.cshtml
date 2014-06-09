@@ -1,0 +1,86 @@
+﻿@model Activity.Models.Vote
+
+<div class="section">
+    <div class="section-header">
+        <h3>投票标题</h3>
+    </div>
+    <div class="section-body">
+        <input type="text" class="title" validtype="required(投票标题)" value="@Model.VoteName" name="VoteName" /><cite>*</cite>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>描述</h3>
+    </div>
+    <div class="section-body">
+        <textarea class="textarea" validtype="required(描述)" name="Description">@Model.Description</textarea><cite>*</cite>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>时间设置</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            <label>结束时间:</label>
+            <input type="text" value="@Model.EndDate" class="date" name="EndDate" /><dfn>留空表示不做时间限制</dfn>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>投票设置</h3>
+    </div>
+    <div class="section-body">
+        <div class="row" id="IsSingle">
+            <label>选项设置:</label>
+            <input type="radio" name="IsSingle" value="Y" checked="checked" />单选
+            <input type="radio" name="IsSingle" value="N" />多选
+        </div>
+        <div class="row" id="IsLogin">
+            <label>投票者设置:</label>
+            <input type="radio" name="IsLogin" value="N" checked="checked" />无限制
+            <input type="radio" name="IsLogin" value="Y" />登录用户
+        </div>
+    </div>
+</div>
+@Html.HiddenFor(m => m.ID)
+<div class="section">
+    <div class="section-header">
+        <h3>投票选项</h3>
+    </div>
+    <div class="section-body" id="voteDetail">
+        <div class="row clear">
+            <span class="count">1</span>：<input type="text" class="large" name="name" />
+        </div>
+        <div class="row clear">
+            <span class="count">2</span>：<input type="text" class="large" name="name" />
+        </div>
+        <div class="row clear">
+            <span class="count">3</span>：<input type="text" class="large" name="name" />
+        </div>
+        <div class="row" id="add">
+            <a href="javascript:void(0);" onclick="Add()">新增</a> | <a href="javascript:void(0);" onclick="Delete()">删除</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Add() {
+        var count = parseInt($("#voteDetail span.count").last().text());
+        count += 1;
+        var final = 1;
+        if (count) {
+            final = count;
+        }
+        $("#add").before("<div class='row'><span class='count'>" + final + "</span>：<input type='text' class='large field-idle' name='name' /></div>");
+    }
+
+    function Delete() {
+        $("#voteDetail .row").eq(-2).remove();
+    }
+
+    $(function () {
+        $(".date").datepicker({ dateFormat: 'yy-mm-dd' });
+    });
+</script>

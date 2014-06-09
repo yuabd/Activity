@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Safe";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section scripts{
+	<script>
+		function Save() {
+			if (!$.validatebox.valid()) {
+				return;
+			}
+
+			var password = $("#password").val();
+			var password1 = $("#password1").val();
+
+			if (password != password1) {
+				alert("两次密码输入不相同！");
+
+				return;
+			}
+
+			var postData = getFormJson($('#Form'));
+
+			HammerAjax('/account/profile/safe', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("修改成功！");
+					window.location.href = "/account/profile/index";
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+	</script>
+}
+
+<div class="content">
+	<div class="leftBox">
+		<div class="mbox_l">
+			<form id="Form">
+				<h3>账号安全<span>修改登录密码</span></h3>
+				<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+					<div class="subt pt7"><p><strong><span>*</span>新密码：</strong></p></div>
+					<div class="formwrap1">
+						<div class="con1">
+							<input value="" class="easyui-validatebox validatebox-text" validtype="required(密码)|" name="password" id="password" type="password" />
+						</div>
+					</div>
+				</div>
+				<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+					<div class="subt pt7"><p><strong><span>*</span>确认密码：</strong></p></div>
+					<div class="formwrap1">
+						<div class="con1">
+							<input value="" class="easyui-validatebox validatebox-text" validtype="required(确认密码)|" name="password1" id="password1" type="password" />
+						</div>
+					</div>
+				</div>
+				<div class="new_log_btn">
+					<input id="submit" onclick="Save()" value="修改" class="btn_log2 btn_submit" type="button" />  
+				</div>
+			</form>
+		</div>
+	</div>
+	<div class="rightBox">
+		@Html.Partial("_Count")
+	</div>
+</div>

@@ -1,0 +1,105 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Apply>
+@{
+    ViewBag.Title = "People";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+	<script type="text/javascript">
+		$(function () {
+			$("#add-form").dialog({ autoOpen: false, modal: true, title: 'Add User', width: 550 });
+		});
+
+		function people(id) {
+			$.ajax({
+				url: '/admin/active/GetApply',
+				type: 'GET',
+				data: { id: id },
+				dataType: "json",
+				success: function (data) {
+					$("#userID").html(data.UserID);
+					$("#gender").html(data.Gender);
+					$("#city").html(data.City);
+					$("#email").html(data.Email);
+					$("#add-form").dialog("open");
+				}
+			});
+		}
+
+		function Cancel(id) {
+			if (confirm("确认要取消该次报名吗?")) {
+				HammerAjax('/admin/active/cancelapply', { id: id }, function (data) {
+					if (data.Tag == 1) {
+						alert("取消成功!");
+						window.location.href;
+					}
+					else {
+						alert("取消失败，请联系管理员!");
+					}
+				});
+			}
+		}
+		//<a href="Wait.cshtml">Wait.cshtml</a>
+	</script>
+}
+<br />
+<div id="add-form">
+	<br />
+	<form action="#" method="post" id="UserForm">
+		<input type="hidden" value="" id="_userID" name="_userID" />
+		<div class="row">
+			<label>用户名:</label>
+			<span id="userID"></span>
+		</div>
+		<div class="row">
+			<label>性别:</label>
+			<span id="gender"></span>
+		</div>
+		<div class="row">
+			<label>城市:</label>
+			<span id="city"></span>
+		</div>
+		<div class="row">
+			<label>邮箱:</label>
+			<span id="email"></span>
+		</div>
+		<p><a href="#" class="button" onclick="$('#add-form').dialog('close');">确定</a></p>
+	</form>
+</div>
+<table class="grid">
+	<tr>
+		<th>编号</th>
+		<th>姓名</th>
+		<th>联系电话</th>
+		<th>短号</th>
+		<th>人数</th>
+		<th>备注</th>
+		<th>时间</th>
+		<th>状态</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+ {
+	 <tr>
+		 <td>@item.ApplyID</td>
+		 <td>@item.Name</td>
+		 <td>@item.Contact</td>
+		 <td>@item.ShortCode</td>
+		 <td>@item.People</td>
+		 <td>@item.Content</td>
+		 <td>@item.DateCreated</td>
+		 <td>
+			 @if (item.Backup == "Y")
+			 {
+				 <span>候选人报名</span>
+			 }
+			 else
+			 {
+				 <span>正常报名</span>
+			 }
+		 </td>
+		 <td>
+			 <a href="javascript:void(0)" onclick=" Cancel('@item.ApplyID') ">取消报名</a>
+		 </td>
+	 </tr>
+ }
+</table>

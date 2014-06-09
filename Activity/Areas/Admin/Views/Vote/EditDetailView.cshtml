@@ -1,0 +1,54 @@
+﻿@model Activity.Models.VoteDetail
+@{
+	ViewBag.Title = "EditDetailView";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+	<script>
+		function Save() {
+			if (!$.validatebox.valid()) {
+				return;
+			}
+
+			var postData = $('#Form').serializeArray();
+			var voteID = $("#VoteID").val();
+			HammerAjax('/admin/Vote/EditDetailJson', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("修改成功!");
+					window.location.href = "/admin/Vote/Edit/" + voteID;
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+	</script>
+}
+<h2>
+	编辑选项</h2>
+<p>
+	<a href="/admin/Vote/Edit/@Model.VoteID" class="button">返回</a></p>
+<form id="Form">
+<div class="section">
+	<div class="section-header">
+		<h3>
+			名称</h3>
+	</div>
+	<div class="section-body">
+		<input class="title  field-idle" validtype="required(名称)" value="@Model.Name" name="name" />
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>
+		</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			<a class="button" onclick="Save()" type="submit">保存</a>
+		</div>
+	</div>
+</div>
+@Html.HiddenFor(m => m.ID)
+@Html.HiddenFor(m => m.VoteID)
+</form>

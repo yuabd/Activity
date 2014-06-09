@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "HotTags";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<script>
+	$(function() {
+		$("#Tags").val('@ViewBag.Tags');
+	});
+	function Save() {
+		if (!$.validatebox.valid()) {
+			return;
+		}
+		var postData = $("#Form").serializeArray();
+		HammerAjax('/Admin/Settings/HotTagsJson', postData, function (data) {
+			if (data.Tag == 1) {
+				alert("设置成功！");
+				window.location.href = "/Admin/Settings/HotTags";
+			}
+			else {
+				alert(data.Message);
+			}
+		});
+	}
+</script>
+<h2>热门关键字设置</h2>
+<form id="Form">
+	<div class="section">
+		<div class="section-header">
+			<h3>热门关键字</h3>
+		</div>
+		<div class="section-body">
+			<input type="text" validtype="maxLen(100)" id="Tags" class="title" name="tags"/> 
+			<dfn>多个关键字之间用空格隔开</dfn>
+		</div>
+	</div>
+	<div class="section">
+		<div class="row">
+			<input type="button" onclick="Save()" value="保存"/>
+		</div>
+	</div>
+</form>

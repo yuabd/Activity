@@ -1,0 +1,160 @@
+﻿@model Activity.Models.Blog
+@{
+    ViewBag.Title = Model.PageTitle;
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@section scripts{
+<script>
+	function submit() {
+		var content = $("#replyinfo").val();
+		if (content == "你觉得这个活动怎么样？") {
+			alert("请输入评论内容!");
+			return;
+		}
+		var postData = { parentID: $("#parentID").val(), TargetID: $("#targetID").val(), Content: content, type: 2 };
+		HammerAjax('/Home/SubmitDiscuss', postData, function (data) {
+			if (data.Tag == 1) {
+				alert("操作成功");
+				location.reload();
+			}
+		});
+	}
+
+	function replyto(replytoid) {
+		var Oreply = $("#r" + replytoid);
+		var Rname = Oreply.find("div[class='name']").html();
+		$("#parentID").val(replytoid);
+		$("#detail_name").html("讨论: 回复 " + Rname);
+		$("#replyinfo")[0].focus();
+	}
+	$(function () {
+			$(".detail_pls").hover(function () {
+				$(this).find(".detail_pls_other").show();
+			}, function () {
+				$(this).find(".detail_pls_other").hide();
+			});
+
+			$("#replyinfo").focus(function () {
+				var textValue = $(this).val();
+				$(this).addClass("focus");
+				if (textValue == '你觉得这个活动怎么样？') {
+					$(this).val('');
+				}
+			});
+
+			if ('@ViewBag.linkUrl' != '') {
+				$('#replyinfo').focus();
+			}
+
+			$("#replyinfo").blur(function () {
+				var textValue = $(this).val();
+				$(this).removeClass("focus");
+				if (textValue == '') {
+					$(this).val('你觉得这个活动怎么样？');
+					$("#detail_name").html('评论');
+					$("#parentID").val('0');
+				}
+			});
+		});
+</script>
+}
+<div class="detail c_xwl">
+	<div class="formwrap1 mb15" style="width: 99%;overflow: hidden;">
+		<div class="mb10" style="width: 100%;overflow: hidden;">
+			<div class="detail_title ie6_w420">
+				<p>
+					<a href="/">首页</a>
+					<em>&gt;</em>
+					<a href="/news/index/@Model.CategoryID">@Model.BlogCategory.CategoryName</a>
+					<em>&gt;</em>
+					<a href="javascript:;">@Model.BlogTitle</a>
+				</p>
+			</div>
+		</div>
+		<div class="conwrap mb10">
+			<br/>
+			<center>
+				<img src="/App_Themes/Site/images/hum.gif" />
+				<p>
+					<strong>
+						<span style="font-size:24px;font-family:Microsoft YaHei;color:#E56600;">
+							@Model.BlogTitle
+						</span>
+					</strong>
+				</p>
+				<p>
+					<strong>
+						<span style="color:#FF9900;">
+							时间：@Model.DateCreated.ToShortDateString()    作者：@Model.AuthorID    浏览量：@Model.PageVisits
+						</span>
+					</strong>
+				</p>
+			</center>
+			<br/>
+			@if (!string.IsNullOrEmpty(Model.PictureFile))
+			{
+				<center>
+					<img src="@Model.PictureFolder/@Model.PictureThumbnail" alt="@Model.BlogTitle"/>
+				</center>
+				<br/>
+				<br/>
+			}
+			@Html.Raw(Model.BlogContent)
+		</div>
+	</div>
+	<div class="fix">
+	</div>
+	@if (Model.CategoryID == 3)
+ {
+	 <div class="wrap1 mb10" style="margin-bottom: 50px;">
+		<div class="detail_pl_title" id="detail_name">评论</div>
+		<div class="detail_pl_ta">
+			<textarea class="js_inputs" id="replyinfo">你觉得这个活动怎么样？</textarea>
+		</div>
+		<div class="fix pt5 pb7" id="discuss_form">
+			<input type="hidden" value="@Model.ID" id="targetID" name="targetID" />
+			<input type="hidden" value="0" name="parentID" id="parentID"/>
+			@if (User.Identity.IsAuthenticated)
+   {
+	   <a href="javascript:submit();" class="detail_pl_btn">发布</a>
+   }
+   else
+   {
+	   <a href="/Login/Index" class="detail_pl_btn">登录</a>
+   }
+			
+			<div class="detail_pl_opt">
+			</div>
+		</div>
+		<div id="replylistdiv">
+			@if (!string.IsNullOrEmpty(ViewBag.linkUrl))
+   {
+	   <a href="/news/detail/@Model.ID">全部讨论</a>
+   }
+			@foreach (var item in ViewBag.Discuss)
+   {
+	   <div class="detail_pls" id='r@(item.ID)'>
+			<div class="c fix">
+				<div class="face">
+					<img src="/App_Themes/Site/images/49903406c792f6e62e9e5619a631bc256ea.jpg" width="40" height="40"><i></i></div>
+				<div class="name">@item.Name</div>
+				<div class="auto">@if (string.IsNullOrEmpty(item.HuifuName))
+					  {<span>说：</span>}
+					  else
+					  {
+						  <span>回复@(item.HuifuName) :</span>
+					  }
+				&nbsp;@item.Content </div>
+				@*<input type="hidden" id="ipt982" value="test">*@
+			</div>
+			<a href="/news/detail/@Model.ID?linkUrl=@item.LinkUrl" class="detail_pls_other">查看对话</a>
+			<a href="javascript:replyto(@item.ID);" class="detail_pls_a">回复</a>
+			<div class="t"></div>
+			<div class="b"></div>
+		</div>
+   }
+			
+		</div>
+	</div>
+ }
+</div>

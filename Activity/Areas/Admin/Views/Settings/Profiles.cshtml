@@ -1,0 +1,83 @@
+﻿@model Activity.Models.User
+@{
+    ViewBag.Title = "Profiles";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<form>
+<div class="section">
+	<div class="section-header">
+		<h3>用户名</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.UserID
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>姓名</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.Name
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>性别</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.Gender
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>单位名称</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.City
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>邮箱</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.Email
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>联系方式</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.Contact
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>简介</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			@Model.Summary
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="row">
+		<a href="/admin/settings/users" class="button-cancel">返回</a>
+	</div>
+</div>
+</form>

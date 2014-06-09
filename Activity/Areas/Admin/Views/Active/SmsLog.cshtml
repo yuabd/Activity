@@ -1,0 +1,50 @@
+﻿@model List<Activity.Models.SmsLog>
+@{
+    ViewBag.Title = "SmsLog";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+    <script type="text/javascript" language="javascript">
+        function SendAgain(number, content, id) {
+            if (confirm('确定要重新发送吗?')) {
+                HammerAjax('/admin/active/SendSms', { phoneNumber: number, smsContent: content, applyIDs: "", id: id }, function () {
+                    alert('操作成功,点击查看短信发送记录!');
+                    window.location.href = '/Admin/Active/SmsLog';
+                }, false);
+            }
+        }
+    </script>
+}
+<h2>短信发送日志</h2>
+<table class="grid">
+    <tr>
+        <th>号码</th>
+        <th>内容</th>
+        <th>发送时间</th>
+        <th>操作人</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Number</td>
+            <td>@item.Content</td>
+            <td>@item.DateCreated</td>
+            <td>@item.OperaUser</td>
+            <td>
+                @if (item.IsSuccess == "N")
+                {
+                    <a href="javascript:void(0);" onclick="SendAgain('@item.Content', '@item.Number', '@item.ID')">重新发送</a>
+                    <br />
+                    <p>
+                        @item.ErrorMessage
+                    </p>
+                }
+                else
+                {
+                    <span>发送成功!</span>
+                }
+            </td>
+        </tr>
+    }
+</table>

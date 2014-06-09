@@ -1,0 +1,58 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Active>
+@{
+    ViewBag.Title = "Wait";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+	<script type="text/javascript">
+		function pass(id) {
+			if (confirm("确认要审核该记录吗?")) {
+				HammerAjax('/admin/active/pass', { id: id }, function (result) {
+					alert(result.Message);
+					window.location.href = "/admin/active/wait";
+				});
+			}
+			return;
+		}
+	</script>
+}
+
+<h2>审核列表</h2>
+@*<p>
+	<a href="/Admin/Active/Add" class="button-add">新增</a>
+</p>*@
+<table class="grid">
+	<tr>
+		<th>活动编号</th>
+		<th>活动图片</th>
+		<th>活动名称</th>
+		<th>创建时间</th>
+		<th>状态</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+ {
+	 var a = "";
+	 if (item.IsPublic)
+	 {
+		 a = "已审核";
+	 }
+	 else
+	 {
+		 a = "未审核";
+	 }
+	 <tr>
+		 <td>@item.ActiveID</td>
+		 <td><img src="@item.PictureFolder/@item.PictureFile" style="width: 80px" /></td>
+		<td>@item.Title</td>
+		<td>@item.DateCreated.ToString()</td>
+		<td>@a</td>
+		<td>
+			<a href="javascript:void(0);" class="button-cancel" onclick="pass('@item.ActiveID')">审核</a> 
+			<a href="/admin/active/edit/@item.ActiveID" class="button-edit">编辑</a>
+			<a href="/admin/active/delete/@item.ActiveID" class="button-delete delete">删除</a>
+		</td>
+	 </tr>
+ }
+</table>
+@Model.Pager("pager")

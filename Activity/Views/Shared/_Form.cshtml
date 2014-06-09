@@ -1,0 +1,164 @@
+﻿@model Activity.Models.Active
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动名称</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            <input type="text" class="title easyui-validatebox validatebox-text" name="Title" value="@Model.Title" id="Title" validtype="required(标题)" /><cite>*</cite>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动图片：</h3>
+    </div>
+    <div class="section-body">
+        <input type="file" onclick='return false;' id="uploadify" />
+        <div id="fileQueue">
+        </div>
+        <font class="other">(大小:500KB以下 / 400px * 240px)</font>
+        <div>
+            <img id="showImg" style="display: none; width: 150px;" />
+        </div>
+        <input type="hidden" id="LogoImgID" name="LogoImgID" />
+        <input type="hidden" id="LogoImgURL" value="@Model.PictureFile" name="LogoImgURL" />
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            投稿主页宣传：</h3>
+    </div>
+    <div class="section-body">
+        <input type="file" onclick='return false;' id="uploadify1" />
+        <div id="fileQueue1">
+        </div>
+        <font class="other">(有机会被选中显示在主页的宣传位, 大小:500KB以下 / 705px * 380px)</font>
+        <div>
+            <img id="showImg1" style="display: none; width: 150px;" />
+        </div>
+        <input type="hidden" id="LogoImgID1" name="LogoImgID1" />
+        <input type="hidden" id="LogoImgURL1" value="@Model.HomePictureFile" name="LogoImgURL1" />
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动分类</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            @Html.DropDownListFor(m => m.CategoryID, Activity.Helpers.ListHelper.GetCateGoriesList(),
+            "选择分类", new { @class = "easyui-validatebox", validtype = "required(分类)" })<cite>*</cite>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动设置</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            <label>
+                活动开始时间：</label>
+            <input type="text" class="date easyui-validatebox validatebox-text"
+			 validtype="required(开始时间)" value="@Model.StartDate" @ViewBag.Account id="StartDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" name="StartDate" />
+            <cite>*</cite>
+            <label>
+                活动结束时间：</label>
+            <input type="text" class="date easyui-validatebox validatebox-text"
+			 validtype="required(结束时间)" value="@Model.EndDate" @ViewBag.Account id="EndDate" onfocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" name="EndDate" />
+            <cite>*</cite>
+            @Html.HiddenFor(m => m.DateCreated)
+        </div>
+        <div class="row">
+            <label>
+                场地：</label>
+            <input type="text" class="easyui-validatebox validatebox-text" 
+			validtype = "required(场地)" value="@Model.Address" name="Address" /><cite>*</cite>
+            <label>
+                费用：</label>
+            <input type="text" class="easyui-validatebox validatebox-text" 
+			value="@Model.Price" name="Price" />
+        </div>
+        <div class="row">
+            <label>
+                人数：</label>
+            <input type="text" class="easyui-validatebox validatebox-text"
+			       validtype = "required(人数)|Num" name="People" value="@Model.People" /><cite>*</cite>
+            <label>
+                活动发起人：</label>
+            <input type="text" class="textbox" name="ContactPeople" value="@Model.ContactPeople" validtype="required(活动发起人)|maxLen(20)" /><cite>*</cite>
+        </div>
+        <div class="row">
+            <label>
+                活动联系人：</label>
+            <input type="text" class="textbox" name="ContactPerson" value="@Model.ContactPerson" validtype="required(活动联系人)|maxLen(100)" /><cite>*</cite>
+            <label>
+                联系人电话：</label>
+            <input type="text" class="textbox" name="PersonPhone" value="@Model.PersonPhone" validtype="required(联系人电话)|Phone" /><cite>*</cite>
+        </div>
+        <div class="row">
+            <label>
+                报名提醒事项:
+            </label>
+            <textarea name="Remind">@Model.Remind</textarea><cite></cite>
+            <label>
+                是否开启讨论:</label>
+            <input type="checkbox" id="IsDiscuss" name="IsDiscuss" />
+        </div>
+        <div class="row">
+            <label>志愿者人数：</label>
+            <input class="textbox" name="VolunteerCount" value="@Model.VolunteerCount" validtype="required(志愿者人数)|PositiveInteger" />
+            <dfn>如需要志愿者,则正常报名会在志愿者报名完成后开启</dfn>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动内容</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            @*@Html.TextAreaFor(m => m.Content, new { rows = 20, @class = "content", style = "width: 100%" })*@
+            <textarea id="Content" name="Content" rows="20" cols="100" class="content" style="width: 100%">@Model.Content</textarea>
+            <cite>*</cite>
+        </div>
+    </div>
+</div>
+<div class="section">
+    <div class="section-header">
+        <h3>
+            标签</h3>
+    </div>
+    <div class="section-body">
+        <div class="row">
+            @Html.TextBox("Tags", Model.Tags, new { @class = "large", validtype = "maxLen(50)" })
+            <dfn>多个标签可用空格号隔开</dfn>
+        </div>
+        <div class="row">
+            <a style="color: #B2B2B2" href="#">热门活动标签</a>：
+            @foreach (var item in Activity.Helpers.ListHelper.GetTags())
+            {
+                <a href="javascript:void(0);" onclick="Addtag('@item')" title="@item">@item</a>
+            }
+        </div>
+        <script>
+            function Addtag(tag) {
+                var tags = $("#Tags").val();
+
+                var html = tags + " " + tag;
+
+                $("#Tags").val(html);
+            }
+        </script>
+    </div>
+</div>
+@Html.HiddenFor(m => m.ActiveID)
+@Html.HiddenFor(m => m.UserID)
+@Html.HiddenFor(m => m.SortOrder)

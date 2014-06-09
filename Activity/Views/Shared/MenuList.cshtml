@@ -1,0 +1,31 @@
+﻿	<div class="menu-list">
+		<h2>网站导航</h2>
+		<ul>
+			<li><a href="/"><span class="e"></span>首页</a></li>
+			<li><a href="/home/Categories"><span class="f"></span>活动列表</a></li>
+            <li><a href="/Home/VoteList">投票中心</a></li>
+			<li><a href="/news/index/3">讨论中心</a></li>
+		</ul>
+		<h2>活动分类</h2>
+		<ul>
+			@foreach (var item in Activity.Helpers.ListHelper.GetCateGoriesList())
+			{
+				<li><a href="/home/categories/@item.Value"><span class="a"></span>@item.Text</a></li>
+			}
+		</ul>
+		<div class="submit">
+				<a href="/account/active/add"><span class="f">发起活动</span></a>
+		</div>
+	</div>
+	<div class="HomeCount fix">
+		<span style="font-size: 8px;">总活动:</span>
+			<span style="color: #ff6c00; font-weight: bold; font-size: 14px;"> @(Activity.Helpers.LabelHelper.GetAllActiveCount())</span>
+	</div>
+	<div class="HomeCount fix">
+		<span style="font-size: 8px;">总会员:</span>
+			<span style="color: #ff6c00; font-weight: bold; font-size: 14px;"> @(Activity.Helpers.LabelHelper.GetUserCount())</span>
+	</div>
+	<div class="HomeCount fix">
+		<span style="font-size: 8px;">参与人次:</span>
+			<span style="color: #ff6c00; font-weight: bold; font-size: 14px;"> @(Activity.Helpers.LabelHelper.GetJoinCount() + 1300)</span>
+	</div>

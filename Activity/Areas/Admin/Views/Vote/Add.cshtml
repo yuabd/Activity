@@ -1,0 +1,57 @@
+﻿@model Activity.Models.Vote
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+    <script type="text/javascript">
+        function Save() {
+            if (!$.validatebox.valid()) {
+                return;
+            }
+
+            var postData = $('#Form').serializeArray();
+
+            var name = $("#voteDetail input[name='name']");
+            var names = "";
+            name.each(function (i, v) {
+                var n = $(this).val();
+                if (n) {
+                    names += n + ";";
+                }
+            });
+            names = names.substring(0, names.length - 1);
+
+            if (names.split(';').length < 2) {
+                alert("选项不能少于2个!!");
+                return;
+            }
+            
+            postData.push({ name: 'names', value: names });
+            var isSingle = $("#IsSingle input[name='IsSingle']:checked").val();
+            postData.push({ name: 'IsSingle', value: isSingle });
+            var isLogin = $("#IsLogin input[name='IsLogin']:checked").val();
+            postData.push({ name: 'IsLogin', value: isLogin });
+
+            HammerAjax('/admin/Vote/AddJson', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("新增成功!");
+                    window.location.href = "/admin/Vote/index";
+                }
+                else {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}
+<h2>增加投票</h2>
+<form id="Form">
+    @Html.Partial("_VoteForm")
+
+    <div class="section">
+        <div class="rows">
+            <a class="button" onclick="Save()">保存</a>
+        </div>
+    </div>
+</form>

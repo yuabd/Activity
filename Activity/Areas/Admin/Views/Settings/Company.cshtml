@@ -1,0 +1,89 @@
+﻿@model Activity.Models.SysConfig
+@{
+	ViewBag.Title = "Company Info";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section head{
+	<script>
+		function Save() {
+			if (!$.validatebox.valid()) {
+				return;
+			}
+
+			var dataPara = $('#Form').serializeArray();
+
+			HammerAjax('/admin/settings/company', dataPara, function (data) {
+				if (data.Tag == 1) {
+					alert("修改成功!");
+					window.location.reload();
+				}
+				else {
+					alert("修改失败!");
+				}
+			});
+        }
+
+        $(function () {
+            $("#AdsContent").xheditor({ upImgUrl: "/Upload/UploadPicture", upImgExt: "jpg,jpeg,gif,png", upFlashUrl: "/Upload/UploadVideo", upFlashExt: 'swf', upMediaUrl: "/Upload/UploadVideo", upMediaExt: "wmv,avi,wma,mp3,mp4,mid,swf", html5Upload: false });
+            $("#Notice").xheditor();
+        });
+
+	</script>
+}
+
+<h2>公司信息</h2>
+
+<form id="Form">
+	<div class="section">
+		<div class="section-body">
+			<div class="row">
+				<label>网站名称:</label>
+				<input name="WebsiteName" value="@Model.WebsiteName" class="large easyui-validatebox validatebox-text" validtype = "required(网站名称)"/>
+				@*@Html.TextBoxFor(m => m.CompanyName, new { @class = "large  easyui-validatebox validatebox-text", validtype = "required(网站名称)" })
+				@Html.ValidationMessageFor(m => m.CompanyName)*@
+			</div>
+			@*<div class="row">
+				<label class="textarea">公司全称:</label>
+				@Html.TextBoxFor(m => m.CompanyNameFull, new { @class = "large easyui-validatebox validatebox-text", validtype = "required(网站名称)" })
+				@Html.ValidationMessageFor(m => m.CompanyNameFull)
+			</div>*@
+			<div class="row">
+				<label>网址:</label>
+				<input name="Url" value="@Model.Url" class="large easyui-validatebox validatebox-text" validtype = "required(网址)|url"/>
+				@*@Html.TextBoxFor(m => m.CompanyWebsite, new { @class = "large easyui-validatebox validatebox-text", validtype = "required(网址)|url" })
+				@Html.ValidationMessageFor(m => m.CompanyWebsite)*@
+			</div>
+			<div class="row">
+				<label>公司电话/传真:</label>
+				<input name="Phone" value="@Model.Phone" class="large easyui-validatebox validatebox-text" validtype = "required(网址)|TelePhone"/>
+				@*@Html.TextBoxFor(m => m.CompanyPhoneNo, new { @class = "large easyui-validatebox validatebox-text", validtype = "required(网址)|TelePhone" })
+				@Html.ValidationMessageFor(m => m.CompanyPhoneNo)*@
+			</div>
+			<div class="row">
+				<label>公告：</label>
+				<textarea name="Notice" id="Notice" style="width: 100%; " validtype="maxLen(500)">@Model.Notice</textarea>
+				@*@Html.TextAreaFor(m => m.Notice, new { @class = "easyui-validatebox", validtype = "maxLength(500)" })
+				@Html.ValidationMessageFor(m => m.Notice)*@
+			</div>
+			<div class="row">
+				<label>显示报名人名字？</label>
+                @Html.CheckBoxFor(m => m.IsShowName)
+				@*@Html.CheckBox("ShowName", Convert.ToBoolean(Model.IsShowName))*@
+			</div>
+            <div class="row">
+                <label>显示主页弹窗？</label>
+                @Html.CheckBoxFor(m => m.IsShowBox)
+				@*@Html.CheckBox("IsShowBox", Convert.ToBoolean(Model.IsShowBox))*@
+            </div>
+            <div class="row">
+                <label>主页弹窗内容：</label>
+                @Html.TextAreaFor(m => m.AdsContent, new { @style = "width: 100%;height: 300px;", @class = "large easyui-validatebox validatebox-text" })
+				@*<input name="HomeBoxUrl" value="@Model.HomeBoxUrl" class="large easyui-validatebox validatebox-text" />*@
+            </div>
+		</div>
+	</div>
+	<div class="section">
+		<button type="button" class="button" onclick="Save()">保存</button>
+	</div>
+</form>

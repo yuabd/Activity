@@ -1,0 +1,84 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Apply>
+@{
+    ViewBag.Title = "我的报名";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section head{
+    <script>
+        function Cancel(id) {
+            if (confirm("确认要取消该次报名吗?")) {
+                HammerAjax('/account/active/cancel', { id: id }, function (data) {
+                    if (data.Tag == 1) {
+                        alert("取消成功!");
+                        window.location.href;
+                    }
+                    else {
+                        alert("取消失败，请联系管理员!");
+                    }
+                });
+            }
+        }
+    </script>
+}
+<div class="content">
+    <div class="leftBox">
+        <h3 style="font-size: 20px; margin-bottom: 20px;">
+            我的报名记录</h3>
+        <div style="width: 681px; background: #f2f2f2; overflow: hidden; padding: 10px;">
+            <table class="grid">
+                <tr>
+                    <th>
+                        编号
+                    </th>
+                    <th>
+                        活动名称
+                    </th>
+                    <th>
+                        报名状态
+                    </th>
+                    <th>
+                        操作
+                    </th>
+                </tr>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ApplyID
+                        </td>
+                        <td>
+                            <a href="/home/detail/@item.ActiveID" target="_blank">@item.Active.Title</a>
+                        </td>
+                        <td>
+                            @if (item.Backup == "Y")
+                            {
+                                <span>替补报名</span>
+                            }
+                            else if (item.Backup == "N")
+                            {
+                                <span>正常报名</span>
+                            }
+                            else
+                            {
+                                <span>志愿者报名</span>
+                            }
+                        </td>
+                        <td>
+                            @if (item.Active.StartDate > DateTime.Now)
+                            {
+                                <a href="javascript:void(0)" onclick=" Cancel('@item.ApplyID') ">取消报名</a>
+                            }
+                            else
+                            {
+                                <span>报名已开始不能取消！</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Model.Pager("pager")
+        </div>
+    </div>
+    <div class="rightBox">
+        @Html.Partial("_Count")
+    </div>
+</div>

@@ -1,0 +1,60 @@
+﻿@model Activity.Models.Active
+@{
+	ViewBag.Title = "写总结";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section scripts{
+	<script src="/Plugins/xheditor/xheditor-1.1.14-zh-cn.min.js" type="text/javascript"></script>
+	<script>
+		function Save() {
+			if (!$.validatebox.valid()) {
+				alert("验证没通过! ");
+				return;
+			}
+
+			var postData = $("#Form").serializeArray();
+
+			HammerAjax('/Account/Active/MakeEnd', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("提交成功！");
+					window.location.href = "/account/active/endActive";
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+
+		$(function () {
+			$(".content").xheditor({ upImgUrl: "/Upload/UploadPicture", upImgExt: "jpg,jpeg,gif,png", upFlashUrl: "/Upload/UploadVideo", upFlashExt: 'swf', upMediaUrl: "/Upload/UploadVideo", upMediaExt: "wmv,avi,wma,mp3,mp4,mid,swf", html5Upload: false });
+		});
+	</script>
+}
+<div class="content">
+	<form id="Form">
+	<h3 style="font-size: 20px; margin-bottom: 20px;">
+		活动总结<span></span></h3>
+	<div class="section">
+		<div class="section-header">
+			<h3>
+				标题：</h3>
+		</div>
+		<div class="section-body">
+			<input type="text" class="title easyui-validatebox validatebox-text" name="Title" disabled="disabled" value="@Model.Title" id="Title" /><cite>*</cite>
+		</div>
+	</div>
+	<div class="section">
+		<div class="section-header">
+			<h3>
+				活动总结：</h3>
+		</div>
+		<div class="section-body">
+			<textarea class="content" rows="20" name="EndContent" style="width: 100%;" validtype="maxLen(4000)">@Model.EndContent</textarea>
+		</div>
+	</div>
+	@Html.HiddenFor(m => m.ActiveID)
+	<div class="new_log_btn">
+		<input id="submit" onclick="Save()" value="提交" class="btn_log2 btn_submit" type="button" />
+	</div>
+	</form>
+</div>

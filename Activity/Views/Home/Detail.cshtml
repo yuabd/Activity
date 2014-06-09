@@ -1,0 +1,441 @@
+﻿@model Activity.Models.Active
+@{
+    ViewBag.Title = "活动详情";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+    var siteSettings = new Activity.Service.SysConfigHelper().GetSysConfig();
+}
+@section scripts{
+    @* ReSharper disable DuplicatingLocalDeclaration *@
+    <script>
+        function Show(id, Backup) {
+            if ('@User.Identity.IsAuthenticated' != 'True') {
+                alert('请先登录!');
+                window.location = '/Login';
+                return;
+            }
+
+            HammerAjax('/Home/CheckActive', { id: id }, function (data) {
+                if (data.Tag != 1) {
+                    alert(data.Message);
+                    return false;
+                }
+                else {
+                    $("#ActiveID").val(id);
+
+                    //$("#Backup").val(Backup);
+                    HammerAjax('/Login/UserInfo', { id: id }, function (data) {
+                        $("#Name").val(data.UserID);
+                        $("#Contact").val(data.Contact);
+                        $("#remind").html(data.Remind);
+                    });
+
+                    $("#applyForm").show();
+                }
+            });
+        }
+
+        function submit() {
+            var content = $("#replyinfo").val();
+            if (content == "你觉得这个活动怎么样？") {
+                alert("请输入评论内容!");
+            }
+            var postData = { parentID: $("#parentID").val(), TargetID: $("#targetID").val(), Content: content, type: 1 };
+            HammerAjax('/Home/SubmitDiscuss', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("操作成功");
+                    location.reload();
+                }
+            });
+        }
+
+        function replyto(replytoid) {
+            var Oreply = $("#r" + replytoid);
+            var Rname = Oreply.find("div[class='name']").html();
+            $("#parentID").val(replytoid);
+            $("#detail_name").html("讨论: 回复 " + Rname);
+            $("#replyinfo")[0].focus();
+        }
+
+
+        function Hide() {
+            $("#applyForm").hide();
+        }
+
+        function Good(id) {
+            HammerAjax('/home/Good', { id: id }, function (data) {
+                if (data.Tag == 1) {
+                    alert("感谢您对我们的支持！!");
+                    location.reload();
+                } else {
+                    alert(data.Message);
+                }
+            });
+        }
+
+        function More(id) {
+            $("#morebutton").hide();
+            HammerAjax('/home/more', { id: id }, function (data) {
+                var a = "";
+                $.each(data, function (i, c) {
+                    a += "<span style='background: Olive; padding: 2px 5px; margin-right: 5px; color: #fff;'>" + c + "</span>";
+                });
+
+                $("#more").append(a);
+            });
+        }
+
+        function apply(id) {
+            if (!$.validatebox.valid()) {
+                return;
+            }
+
+            var postData = getFormJson($('#applyForm'));
+
+            HammerAjax('/home/apply', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("报名成功!");
+                    location.reload();
+                } else {
+                    alert(data.Message);
+                }
+            });
+        }
+
+        $(function () {
+            $(".detail_pls").hover(function () {
+                $(this).find(".detail_pls_other").show();
+            }, function () {
+                $(this).find(".detail_pls_other").hide();
+            });
+
+            $("#replyinfo").focus(function () {
+                var textValue = $(this).val();
+                $(this).addClass("focus");
+                if (textValue == '你觉得这个活动怎么样？') {
+                    $(this).val('');
+                }
+            });
+            if ('@ViewBag.linkUrl' != '') {
+                $('#replyinfo').focus();
+            }
+            $("#replyinfo").blur(function () {
+                var textValue = $(this).val();
+                $(this).removeClass("focus");
+                if (textValue == '') {
+                    $(this).val('你觉得这个活动怎么样？');
+                    $("#detail_name").html('评论');
+                    $("#parentID").val('0');
+                }
+            });
+        })
+    </script>
+    @* ReSharper restore DuplicatingLocalDeclaration *@
+}
+@Html.Partial("_ApplyForm")
+<div class="detail c_xwl">
+    <div class="formwrap1 mb15">
+        <div class="mb10" style="width: 100%; overflow: hidden;">
+            @{
+                int? count = Model.Applies.Sum(m => m.People ?? 0);
+                int? normalCount = Model.Applies.Where(m => m.Backup == "N").Sum(m => m.People ?? 0);
+                int? backupCount = Model.Applies.Where(m => m.Backup == "Y").Sum(m => m.People ?? 0);
+                int? voluteerCount = Model.Applies.Where(m => m.Backup == "V").Sum(m => m.People ?? 0);
+            }
+            @*<div class="detail_jiucuo">
+			</div>*@
+            <div class="detail_title ie6_w420">
+                <p>
+                    <a href="/">首页</a> <em>&gt;</em> <a href="/home/categories/@ViewBag.CategoryID">@ViewBag.Category</a>
+                    <em>&gt;</em> <a href="javascript:;">@Model.Title</a>
+                </p>
+            </div>
+        </div>
+        <div class="conwrap mb10">
+            <div class="detail_info">
+                <div id="detail_bigimg" class="bigimg">
+                    <img title="@Model.Title" alt="@Model.Title" src="@Model.PictureFolder/@Model.PictureFile" style="width: 400px;"></div>
+                <div class="det_text">
+                    <h1>
+                        @if (Model.Status == "NoStart")
+                        {
+                            <span style="color: red;">【报名中】</span>
+                        }
+                        else if (Model.Status == "Normal")
+                        {
+                            <span style="color: Fuchsia;">【活动进行中】</span>
+                        }
+                        else
+                        {
+                            <span style="color: Olive;">【活动已结束】</span>
+                        }
+                        @Model.Title
+                    </h1>
+                    <div class="auto">
+                        <p>
+                            时间：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.StartDate - @Model.EndDate &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+                    </div>
+                    <div class="auto">
+                        <p class="address">
+                            场地：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Model.Address</p>
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.Price))
+                    {
+                        <div class="auto">
+                            <p>
+                                费用：&nbsp;&nbsp;&nbsp;&nbsp;@Model.Price</p>
+                        </div>
+                    }
+                    <div class="auto">
+                        <p>
+                            活动联系人：&nbsp;&nbsp;&nbsp;&nbsp;@(Model.ContactPerson)
+                            @Model.PersonPhone, 发起人: @Model.ContactPeople</p>
+                    </div>
+                    <div class="auto">
+                        <p>
+                            浏览量：@Model.PageVisits</p>
+                    </div>
+                    <div class="auto">
+                        <p>
+                            需要志愿者人数：&nbsp;&nbsp;&nbsp;&nbsp;@Model.VolunteerCount</p>
+                    </div>
+                    <div class="auto">
+                        <p>
+                            报名情况：&nbsp;&nbsp;&nbsp;&nbsp;总人数： @Model.People, 报名人数：@count,其中成功报名为@(normalCount)人,候补报名@(backupCount)人,志愿者@(voluteerCount)人</p>
+                    </div>
+                    @if (siteSettings.IsShowName == true)
+                    {
+                        <div class="auto">
+                            <p>
+                                成功报名：
+                                @foreach (var item in ViewBag.Applies)
+                                {
+                                    <span style="background: Olive; padding: 2px 5px; color: #fff;">@item.Name</span>
+                                }
+                                <span id="more"></span><a href="javascript:void(0);" id="morebutton" onclick="More('@Model.ActiveID')">
+                                    <span style="padding: 2px 5px; color: #00bfff;">更多</span> </a>
+                            </p>
+                        </div>
+                        <div class="auto">
+                            @if (ViewBag.Backup.Count > 0)
+                            {
+                                <p>
+                                    候补报名：
+                                    @foreach (var item in ViewBag.Backup)
+                                    {
+                                        <span style="background: Olive; padding: 2px 5px; color: #fff;">@item.Name</span>
+                                    }
+                                </p>
+                            }
+                        </div>
+                        <div class="auto">
+                            @if (Model.VolunteerCount > 0)
+                            {
+                                <p>
+                                    志愿者报名：
+                                    @foreach (var item in ViewBag.Volunteer)
+                                    {
+                                        <span style="background: Olive; padding: 2px 5px; color: #fff;">@item.Name</span>
+                                    }
+                                </p>
+                            }
+                        </div>
+                    }
+                    <div class="auto xomore2">
+                        @if (Model.AlreadyApply == "N")
+                        {
+                            if (voluteerCount >= Model.VolunteerCount)
+                            {
+                                if (Model.People > normalCount)
+                                {
+                            <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>报名</span>
+                            </a>
+                                }
+                                else
+                                {
+                                    int acount = Convert.ToInt32(Model.People * 0.15);
+                                    if (acount > backupCount)
+                                    {
+                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
+                            </a>
+                                    }
+                                    else
+                                    {
+                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'V') "><span>志愿者报名</span>
+                            </a>
+                            }
+                        }
+                        else
+                        {
+                            <a href="javascript:void(0);"><span>您已报名！</span></a>
+                        }
+                        @*@if (Model.Status == "Normal")
+                        {
+                            if (Model.EndDate >= DateTime.Now.AddDays(1))
+                            {
+                                if (Model.People > count)
+                                {
+                                    if (Model.AlreadyApply == "N")
+                                    {
+                            <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>进行中,报名</span>
+                            </a>
+                                    }
+                                    else
+                                    {
+                            <a href="javascript:void(0)"><span>进行中,已报名</span> </a>
+                                    }
+                                }
+                                else
+                                {
+                                    int acount = Convert.ToInt32(Model.People * 0.15);
+                                    if (acount > backupCount)
+                                    {
+                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
+                            </a>
+                                    }
+                                    else
+                                    {
+                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                            <a href="javascript:void(0)"><span>活动进行中</span> </a>
+                            }
+                        }
+                        else if (Model.Status == "End")
+                        {
+                            <a href="javascript:void(0)"><span>活动已结束</span> </a>
+                        }
+                        else
+                        {
+                            if (voluteerCount >= Model.VolunteerCount)
+                            {
+                                if (Model.People > count)
+                                {
+                                    if (Model.AlreadyApply == "N")
+                                    {
+                                        <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>报名</span>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0)"><span>已报名</span> </a>
+                                    }
+                                }
+                                else
+                                {
+                                    int acount = Convert.ToInt32(Model.People * 0.15);
+                                    if (acount > backupCount)
+                                    {
+                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
+                            </a>
+                                    }
+                                    else
+                                    {
+                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'V') "><span>志愿者报名</span>
+                                </a>
+                            }
+                        }*@
+                    </div>
+                    <div class="auto" style="margin-top: 5px;">
+                        <a href="javascript:void(0);" onclick="Good('@Model.ActiveID')">赞一个</a> | 已获得<span
+                            style="color: tomato;"> @(Model.Good)
+                        </span>个赞
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="conwrap mb10" id="detail-content" style="padding: 10px;">
+            <h1>
+                活动描述：</h1>
+            @Html.Raw(Model.Content)
+            @if (!string.IsNullOrEmpty(Model.HomePictureFile))
+            {
+                <h1>
+                    宣传图片</h1>
+                <div>
+                    <img src="@Model.PictureFolder/@Model.HomePictureFile" />
+                </div>
+            }
+            @if (!string.IsNullOrEmpty(Model.EndContent))
+            {
+                <h1>
+                    活动感受：</h1>
+                @Html.Raw(Model.EndContent)
+            }
+        </div>
+    </div>
+    <div class="fix">
+    </div>
+    @if (Model.IsDiscuss == "Y")
+    {
+        <div class="wrap1 mb10" style="margin-bottom: 50px;">
+            <div class="detail_pl_title" id="detail_name">
+                评论</div>
+            <div class="detail_pl_ta">
+                <textarea class="js_inputs" id="replyinfo">你觉得这个活动怎么样？</textarea>
+            </div>
+            <div class="fix pt5 pb7" id="discuss_form">
+                <input type="hidden" value="@Model.ActiveID" id="targetID" name="targetID" />
+                <input type="hidden" value="0" name="parentID" id="parentID" />
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <a href="javascript:submit();" class="detail_pl_btn">发布</a>
+                }
+                else
+                {
+                    <a href="/Login/Index" class="detail_pl_btn">登录</a>
+                }
+                <div class="detail_pl_opt">
+                </div>
+            </div>
+            <div id="replylistdiv">
+                @if (!string.IsNullOrEmpty(ViewBag.linkUrl))
+                {
+                    <a href="/home/detail/@Model.ActiveID">全部讨论</a>
+                }
+                @foreach (var item in ViewBag.Discuss)
+                {
+                    <div class="detail_pls" id='r@(item.ID)'>
+                        <div class="c fix">
+                            <div class="face">
+                                <img src="/App_Themes/Site/images/49903406c792f6e62e9e5619a631bc256ea.jpg" width="40"
+                                    height="40"><i></i></div>
+                            <div class="name">@item.Name</div>
+                            <div class="auto">
+                                @if (string.IsNullOrEmpty(item.HuifuName))
+                                {<span>说：</span>}
+                                else
+                                {
+                                    <span>回复@(item.HuifuName)
+                                        :</span>
+                                }
+                                &nbsp;@item.Content
+                            </div>
+                            @*<input type="hidden" id="ipt982" value="test">*@
+                        </div>
+                        <a href="/home/detail/@Model.ActiveID?linkUrl=@item.LinkUrl" class="detail_pls_other">
+                            查看对话</a> <a href="javascript:replyto(@item.ID);" class="detail_pls_a">回复</a>
+                        <div class="t">
+                        </div>
+                        <div class="b">
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

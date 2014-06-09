@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Activity.Models.Photo>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>首页图片管理</h2>
+
+@using (Html.BeginForm("AddPicture", "Picture", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+	<div class="section">
+        <div class="section-header">
+            新增图片
+        </div>
+		<div class="section-body">
+			<div class="row">
+				<label>选择图片</label>
+				<input type="file" name="file" /> <dfn>大小：705px * 380px</dfn>
+			</div>
+			<div class="row">
+				<label>标题：</label>
+				<input type="text" name="PhotoName" />    
+			</div>
+			<div class="row">
+				<label>链接：</label>
+				<input type="text" name="Url" />
+			</div>
+            <div class="row">
+				<label>排序：</label>
+				<input type="text" name="SortOrder" />    
+			</div>
+			<div class="row">
+				@*<input type="hidden" name="GalleryID" value="@ViewBag.GalleryID" />*@
+				<button type="submit">新增</button>
+			</div>
+		</div>
+    </div>
+}
+
+@foreach (var item in Model)
+{
+	using (Html.BeginForm("EditPicture", "Picture", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+	    <div class="section">
+            <div class="section-header">
+                <img src="@item.PhotoFolder/@item.PhotoFile" style="" alt="@item.PhotoName"/>
+            </div>
+            <div class="section-body">
+                <div class="row">
+                    <label>图片</label>                    
+                    <input name="file" type="file" />
+                </div>
+            
+	            <div class="row">
+		            <label>标题：</label>
+		            @Html.TextBox("PhotoName", item.PhotoName)
+	            </div>
+	            <div class="row">
+		            <label>链接：</label>
+					@Html.TextBox("Url", item.Url)
+	            </div>
+                <div class="row">
+		            <label>排序：</label>
+					@Html.TextBox("SortOrder", item.SortOrder)
+	            </div>
+                <div class="row">
+                    <input type="hidden" name="PhotoID" value="@item.PhotoID" />
+                    <input type="hidden" name="PhotoFile" value="@item.PhotoFile" />                    
+                    <button type="submit">更新</button>
+                    <a href="/Admin/Picture/DeletePicture/@item.PhotoID" class="delete button-delete-icon">删除</a>
+                </div>
+            </div>
+        </div>
+    }
+}
+

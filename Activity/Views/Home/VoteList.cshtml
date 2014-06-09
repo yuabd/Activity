@@ -1,0 +1,52 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Vote>
+@{
+    ViewBag.Title = "投票中心";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@section head{
+    <style>
+        .s2 li em
+        {
+            float: right;
+        }
+    </style>
+}
+<div class="indexLert">
+    <div class="submenu">
+        @Html.Partial("MenuList")
+    </div>
+</div>
+<div class="content">
+    <div class="leftBox">
+        <h3 class="voteTitle">
+			@*投票中心*@
+		</h3>
+        <div style="width: 681px; overflow: hidden; padding: 10px;">
+            <ul class="s2">
+                @foreach (var item in Model)
+                {
+                    <li>
+						@if (item.EndDate >= DateTime.Now || string.IsNullOrEmpty(item.EndDate.ToString()))
+	  {
+		  <span style="color: Red;">[进行中]</span>
+	  }
+	  else
+	  {
+		  <span style="color: Olive;">[已结束]</span>
+	  }
+                        <a href="/home/vote/@item.ID">@item.VoteName</a>
+                        @if (!string.IsNullOrEmpty(item.EndDate.ToString()))
+                        {
+                            <em>@item.StartDate - @item.EndDate</em>
+                        }
+                        else
+                        {
+                            <em>不限时间</em>
+                        }
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    @Html.Partial("_Sidebar")
+</div>

@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B372F726-BF23-495C-A986-F629646783E1}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Activity</RootNamespace>
+    <AssemblyName>Activity</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="SiteDataContext-Deployment" Order="1">
+          <Destination Path="" />
+          <Object Type="dbFullSql">
+            <PreSource Path="Data Source=|DataDirectory|Activity.sdf" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\SiteDataContext-Deployment_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>E:\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages" />
+    <Reference Include="System.Web.Helpers" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Areas\Account\AccountAreaRegistration.cs" />
+    <Compile Include="Areas\Account\Controllers\ActiveController.cs" />
+    <Compile Include="Areas\Account\Controllers\ProfileController.cs" />
+    <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\ActiveController.cs" />
+    <Compile Include="Areas\Admin\Controllers\ApplyController.cs" />
+    <Compile Include="Areas\Admin\Controllers\BlogController.cs" />
+    <Compile Include="Areas\Admin\Controllers\PictureController.cs" />
+    <Compile Include="Areas\Admin\Controllers\SettingsController.cs" />
+    <Compile Include="Areas\Admin\Controllers\VoteController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\TestController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\IO.cs" />
+    <Compile Include="Helpers\LabelHelper.cs" />
+    <Compile Include="Helpers\ListHelper.cs" />
+    <Compile Include="Helpers\Utilities.cs" />
+    <Compile Include="Models\Active.cs" />
+    <Compile Include="Models\Apply.cs" />
+    <Compile Include="Models\Blog.cs" />
+    <Compile Include="Models\BlogCategory.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Discuss.cs" />
+    <Compile Include="Models\Others\BaseObject.cs" />
+    <Compile Include="Models\Others\DataAccess.cs" />
+    <Compile Include="Models\Others\Paginated.cs" />
+    <Compile Include="Models\Others\SiteSettings.cs" />
+    <Compile Include="Models\Others\xheditorModel.cs" />
+    <Compile Include="Models\Photo.cs" />
+    <Compile Include="Models\SiteDataContext.cs" />
+    <Compile Include="Models\ActiveTag.cs" />
+    <Compile Include="Models\SmsLog.cs" />
+    <Compile Include="Models\SysConfig.cs" />
+    <Compile Include="Models\TagJoin.cs" />
+    <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserRole.cs" />
+    <Compile Include="Models\UserRoleJoin.cs" />
+    <Compile Include="Models\UserVote.cs" />
+    <Compile Include="Models\ViewModels\LoginViewModel.cs" />
+    <Compile Include="Models\ViewModels\VoteViewModel.cs" />
+    <Compile Include="Models\VolunteerApply.cs" />
+    <Compile Include="Models\Vote.cs" />
+    <Compile Include="Models\VoteDetail.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\BlogService.cs" />
+    <Compile Include="Service\MembershipService.cs" />
+    <Compile Include="Service\PhotoService.cs" />
+    <Compile Include="Service\PictureService.cs" />
+    <Compile Include="Service\SiteService.cs" />
+    <Compile Include="Service\SysConfigService.cs" />
+    <Compile Include="Service\VoteService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\Activity.sdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="App_Themes\Admin\Images\Icons\Application.png" />
+    <Content Include="App_Themes\Admin\Images\Icons\Boss.png" />
+    <Content Include="App_Themes\Admin\Images\Icons\Coin.png" />
+    <Content Include="App_Themes\Admin\Images\Icons\Home.png" />
+    <Content Include="App_Themes\Admin\Images\sidebar-bg.png" />
+    <Content Include="App_Themes\Admin\Style.css" />
+    <Content Include="App_Themes\black-tie\images\sidebar-bg.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_diagonals-thick_8_333333_40x40.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_flat_65_ffffff_40x100-custom.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_flat_65_ffffff_40x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_glass_40_111111_1x400.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_glass_55_1c1c1c_1x400.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_highlight-hard_100_f9f9f9_1x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_highlight-hard_40_aaaaaa_1x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_highlight-soft_50_aaaaaa_1x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_inset-hard_45_cd0a0a_1x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-bg_inset-hard_55_ffeb80_1x100.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_222222_256x240.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_4ca300_256x240.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_bbbbbb_256x240.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_ededed_256x240.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_ffcf29_256x240.png" />
+    <Content Include="App_Themes\black-tie\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="App_Themes\black-tie\jquery-ui-1.8.13.custom.css" />
+    <Content Include="App_Themes\black-tie\jquery.ui.selectmenu.css" />
+    <Content Include="App_Themes\EasyUI\easyui.css" />
+    <Content Include="App_Themes\Site\images\10f.jpg" />
+    <Content Include="App_Themes\Site\images\49903406c792f6e62e9e5619a631bc256ea.jpg" />
+    <Content Include="App_Themes\Site\images\bg.jpg" />
+    <Content Include="App_Themes\Site\images\bg_detail_jiucuo.gif" />
+    <Content Include="App_Themes\Site\images\bg_detail_pl_title.gif" />
+    <Content Include="App_Themes\Site\images\btn.png" />
+    <Content Include="App_Themes\Site\images\faqi.jpg" />
+    <Content Include="App_Themes\Site\images\footer_bg.jpg" />
+    <Content Include="App_Themes\Site\images\grid_bg.png" />
+    <Content Include="App_Themes\Site\images\hum.jpg" />
+    <Content Include="App_Themes\Site\images\ico1.png" />
+    <Content Include="App_Themes\Site\images\ico2.png" />
+    <Content Include="App_Themes\Site\images\ico_close1.png" />
+    <Content Include="App_Themes\Site\images\ico_global.png" />
+    <Content Include="App_Themes\Site\images\indexLeft_bg.jpg" />
+    <Content Include="App_Themes\Site\images\nivo-arrows.png" />
+    <Content Include="App_Themes\Site\images\nivo-bullets.png" />
+    <Content Include="App_Themes\Site\images\nivo-loading.gif" />
+    <Content Include="App_Themes\Site\images\right_bg.jpg" />
+    <Content Include="App_Themes\Site\images\search_bg.jpg" />
+    <Content Include="App_Themes\Site\images\sidebar-bg.jpg" />
+    <Content Include="App_Themes\Site\images\title.png" />
+    <Content Include="App_Themes\Site\images\tjhd.jpg" />
+    <Content Include="App_Themes\Site\images\zhd.jpg" />
+    <Content Include="App_Themes\Site\images\hum.gif" />
+    <Content Include="App_Themes\Site\nivo-slider.css" />
+    <Content Include="App_Themes\Site\Style.css" />
+    <Content Include="Global.asax" />
+    <Content Include="Plugins\WDatePicker\calendar.js" />
+    <Content Include="Plugins\WDatePicker\config.js" />
+    <Content Include="Plugins\WDatePicker\lang\en.js" />
+    <Content Include="Plugins\WDatePicker\lang\zh-cn.js" />
+    <Content Include="Plugins\WDatePicker\lang\zh-tw.js" />
+    <Content Include="Plugins\WDatePicker\My97DatePicker.htm" />
+    <Content Include="Plugins\WDatePicker\skin\datePicker.gif" />
+    <Content Include="Plugins\WDatePicker\skin\default\datepicker.css" />
+    <Content Include="Plugins\WDatePicker\skin\default\img.gif" />
+    <Content Include="Plugins\WDatePicker\skin\WdatePicker.css" />
+    <Content Include="Plugins\WDatePicker\skin\whyGreen\bg.jpg" />
+    <Content Include="Plugins\WDatePicker\skin\whyGreen\datepicker.css" />
+    <Content Include="Plugins\WDatePicker\skin\whyGreen\img.gif" />
+    <Content Include="Plugins\WDatePicker\WdatePicker.js" />
+    <Content Include="Plugins\xheditor\xheditor-1.1.14-zh-cn.min.js" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\angry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\awkward.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\bye.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\crazy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\cry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\curse.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\cute.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\despise.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\doubt.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\envy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\fastcry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\knock.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\laugh.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\mad.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\ohmy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\panic.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\proud.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\quiet.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\sad.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\shutup.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\shy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\sleep.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\smile.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\struggle.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\titter.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\tongue.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\wail.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\default\wronged.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\alien.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\angel.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\angry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\bandit.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\biglaugh.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\blink.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\blush.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\cool.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\cry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\depres.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\devil.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\glare.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\heart.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\joyful.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\kiss.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\laugh.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\magician.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\ninja.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\pinch.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\police.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\sad.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\sick.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\sideways.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\sleep.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\smile.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\surprised.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\tongue.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\unsure.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\w00t.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\whistling.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\wondering.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\ipb\wub.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\1.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\10.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\11.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\12.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\13.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\14.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\15.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\16.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\17.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\18.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\19.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\2.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\20.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\21.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\22.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\23.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\24.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\25.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\26.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\27.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\28.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\29.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\3.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\30.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\31.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\32.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\33.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\34.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\35.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\36.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\37.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\38.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\39.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\4.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\40.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\5.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\6.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\7.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\8.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\msn\9.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\angry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\bad.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\blush.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\brokenheart.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\bye.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\coffee.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\cool.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\cry.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\curse.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\cute.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\devil.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\envy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\gift.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\good.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\kiss.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\laugh.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\love.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\music.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\question.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\rose.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\sad.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\shocked.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\shout.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\sick.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\sleepy.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\smile.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\soccer.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\sweat.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\tired.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\tongue.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\victory.gif" />
+    <Content Include="Plugins\xheditor\xheditor_emot\pidgin\wink.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\add.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\bg1.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\bg2.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\btnbg.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\btnbgr.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\clear.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\progressbg.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\img\start.gif" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\multiupload.css" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\multiupload.html" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\multiupload.js" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\swfupload\swfupload.js" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\multiupload\swfupload\swfupload.swf" />
+    <Content Include="Plugins\xheditor\xheditor_plugins\ubb.min.js" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\iframe.css" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\close.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\flash.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\icons.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\loading.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\progress.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\progressbg.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-address.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-div.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h1.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h2.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h3.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h4.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h5.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-h6.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-p.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\tag-pre.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\waiting.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\img\wmp.gif" />
+    <Content Include="Plugins\xheditor\xheditor_skin\default\ui.css" />
+    <Content Include="Scripts\Form.js" />
+    <Content Include="Scripts\jquery.easyui.js" />
+    <Content Include="Scripts\jquery.nivo.slider.pack.js" />
+    <Content Include="Scripts\validate.js" />
+    <Content Include="Scripts\WdatePicker.js" />
+    <Content Include="SiteSettings.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="uploadify\cancel.png" />
+    <Content Include="uploadify\del.png" />
+    <Content Include="uploadify\delete.png" />
+    <Content Include="uploadify\expressInstall.swf" />
+    <Content Include="uploadify\jquery.js" />
+    <Content Include="uploadify\jquery.uploadify.js" />
+    <Content Include="uploadify\jquery.uploadify.v2.1.4.js" />
+    <Content Include="uploadify\swfobject.js" />
+    <Content Include="uploadify\upAttachment.gif" />
+    <Content Include="uploadify\UpImg.gif" />
+    <Content Include="uploadify\upload.GIF" />
+    <Content Include="uploadify\uploadify.allglyphs.swf" />
+    <Content Include="uploadify\uploadify.css" />
+    <Content Include="uploadify\uploadify.swf" />
+    <Content Include="uploadify\副本 jquery.uploadify.v2.1.4.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery-1.4.4.js" />
+    <Content Include="Scripts\jquery-1.4.4.min.js" />
+    <Content Include="Scripts\jquery-1.4.4-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-ui.js" />
+    <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\Shared\_Sidebar.cshtml" />
+    <Content Include="Views\Shared\MenuList.cshtml" />
+    <Content Include="Views\Shared\_ApplyForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\TagsList.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\HotTags.cshtml" />
+    <Content Include="Areas\Account\Views\Shared\_Count.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\Categories.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\PendingComments.cshtml" />
+    <Content Include="Areas\Admin\Views\Blog\_Form.cshtml" />
+    <Content Include="Views\News\Detail.cshtml" />
+    <Content Include="Views\News\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Shared\_Form.cshtml" />
+    <Content Include="Views\Home\Tags.cshtml" />
+    <Content Include="XML.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Areas\Admin\Views\Active\SmsLog.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Add.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\_VoteForm.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\Edit.cshtml" />
+    <Content Include="Views\Home\Vote.cshtml" />
+    <Content Include="Areas\Admin\Views\Vote\EditDetailView.cshtml" />
+    <Content Include="Views\Home\VoteList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Account\Models\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Content\Blog\" />
+    <Folder Include="Content\Images\" />
+    <Folder Include="Content\Videos\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Areas\Admin\Views\Active\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\Add.cshtml" />
+    <Content Include="Views\Shared\_Form.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\Edit.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\Wait.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Company.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Password.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Roles.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Users.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\Categories.cshtml" />
+    <Content Include="Areas\Admin\Views\Apply\Applies.cshtml" />
+    <Content Include="Areas\Account\Views\Web.config" />
+    <Content Include="Areas\Account\Views\Active\Index.cshtml" />
+    <Content Include="Areas\Account\Views\Profile\Index.cshtml" />
+    <Content Include="Areas\Account\Views\Profile\Safe.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\NotStart.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\EndActive.cshtml" />
+    <Content Include="Areas\Account\Views\Active\NotStart.cshtml" />
+    <Content Include="Areas\Account\Views\Active\EndActive.cshtml" />
+    <Content Include="Areas\Account\Views\Active\Wait.cshtml" />
+    <Content Include="Areas\Account\Views\Active\Add.cshtml" />
+    <Content Include="Areas\Account\Views\Active\Edit.cshtml" />
+    <Content Include="Areas\Account\Views\Active\MakeEnd.cshtml" />
+    <Content Include="Areas\Account\Views\Active\Applies.cshtml" />
+    <Content Include="Areas\Admin\Views\Active\People.cshtml" />
+    <Content Include="Areas\Admin\Views\Settings\Profiles.cshtml" />
+    <Content Include="Areas\Account\Views\Active\ActiveApplies.cshtml" />
+    <Content Include="Areas\Admin\Views\Picture\Index.cshtml" />
+    <Content Include="Areas\Account\Views\Active\VolunteerView.cshtml" />
+    <None Include="Properties\PublishProfiles\11.pubxml" />
+    <None Include="uploadify\com\adobe\air\logging\FileTarget.as" />
+    <None Include="uploadify\com\adobe\crypto\HMAC.as" />
+    <None Include="uploadify\com\adobe\crypto\MD5.as" />
+    <None Include="uploadify\com\adobe\crypto\MD5Stream.as" />
+    <None Include="uploadify\com\adobe\crypto\SHA1.as" />
+    <None Include="uploadify\com\adobe\crypto\SHA224.as" />
+    <None Include="uploadify\com\adobe\crypto\SHA256.as" />
+    <None Include="uploadify\com\adobe\crypto\WSSEUsernameToken.as" />
+    <None Include="uploadify\com\adobe\errors\IllegalStateError.as" />
+    <None Include="uploadify\com\adobe\fileformats\vcard\Address.as" />
+    <None Include="uploadify\com\adobe\fileformats\vcard\Email.as" />
+    <None Include="uploadify\com\adobe\fileformats\vcard\Phone.as" />
+    <None Include="uploadify\com\adobe\fileformats\vcard\VCard.as" />
+    <None Include="uploadify\com\adobe\fileformats\vcard\VCardParser.as" />
+    <None Include="uploadify\com\adobe\images\BitString.as" />
+    <None Include="uploadify\com\adobe\images\JPGEncoder.as" />
+    <None Include="uploadify\com\adobe\images\PNGEncoder.as" />
+    <None Include="uploadify\com\adobe\net\DynamicURLLoader.as" />
+    <None Include="uploadify\com\adobe\net\IURIResolver.as" />
+    <None Include="uploadify\com\adobe\net\MimeTypeMap.as" />
+    <None Include="uploadify\com\adobe\net\proxies\RFC2817Socket.as" />
+    <None Include="uploadify\com\adobe\net\URI.as" />
+    <None Include="uploadify\com\adobe\net\URIEncodingBitmap.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\Database.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\Definition.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\Dict.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\DictionaryServer.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\ConnectedEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\DatabaseEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\DefinitionEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\DefinitionHeaderEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\DictionaryServerEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\DisconnectedEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\ErrorEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\MatchEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\MatchStrategiesEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\events\NoMatchEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\MatchStrategy.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\Response.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\util\CompleteResponseEvent.as" />
+    <None Include="uploadify\com\adobe\protocols\dict\util\SocketHelper.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSON.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONDecoder.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONEncoder.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONParseError.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONToken.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONTokenizer.as" />
+    <None Include="uploadify\com\adobe\serialization\json\JSONTokenType.as" />
+    <None Include="uploadify\com\adobe\utils\ArrayUtil.as" />
+    <None Include="uploadify\com\adobe\utils\DateUtil.as" />
+    <None Include="uploadify\com\adobe\utils\DictionaryUtil.as" />
+    <None Include="uploadify\com\adobe\utils\IntUtil.as" />
+    <None Include="uploadify\com\adobe\utils\NumberFormatter.as" />
+    <None Include="uploadify\com\adobe\utils\StringUtil.as" />
+    <None Include="uploadify\com\adobe\utils\XMLUtil.as" />
+    <None Include="uploadify\com\adobe\webapis\events\ServiceEvent.as" />
+    <None Include="uploadify\com\adobe\webapis\ServiceBase.as" />
+    <None Include="uploadify\com\adobe\webapis\URLLoaderBase.as" />
+    <Content Include="Views\Shared\_AdminLayout.cshtml" />
+    <Content Include="Views\Shared\_SiteLayout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Detail.cshtml" />
+    <Content Include="Views\Home\Categories.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Shared\_AccountLayout.cshtml" />
+    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Login\Register.cshtml" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>13809</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

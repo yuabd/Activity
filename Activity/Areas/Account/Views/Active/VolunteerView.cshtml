@@ -1,0 +1,152 @@
+﻿@model List<Activity.Models.VolunteerApply>
+@{
+    ViewBag.Title = "VolunteerView";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<table class="">
+    
+</table>
+
+
+<div class="section">
+    <div class="section-header">
+        <h3>
+            活动志愿者</h3>
+    </div>
+    <div id="volunteerForm" class="section-body">
+        <div id="alert_xwl_login" class="alert_xwl login login2box" style="">
+            <form id="volunteerForm">
+            <div class="C">
+                <div class="close_poparea">
+                    <a href="javascript:removeI();"><span>关闭</span></a></div>
+                <div class="login2area">
+                    <div class="row">
+                        <label>
+                            志愿者类型：</label>
+                        <input id="volunteerType" col="volunteerType" validtype="required(志愿者类型)" /><cite>*</cite>
+                    </div>
+                    <div class="row">
+                        <label>
+                            人数：</label>
+                        <input id="volunteerPeople" col="volunteerPeople" validtype="required(人数)|PositiveInteger" /><cite>*</cite>
+                    </div>
+                    <input type="hidden" col="ActiveID" value="@ViewBag.ActiveID" />
+                    <div class="row">
+                        <input type="button" class="btn_log2 btn_submit" value="提交" onclick="AddVolunteerJson();" />
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+        <script>
+            function removeI() {
+                $("#volunteerPeople").val('');
+                $("#volunteerType").val('');
+                $("#alert_xwl_login").hide();
+            }
+
+            function AddVolunteerJson() {
+                if (!$.validatebox.valid($("#alert_xwl_login"))) {
+                    alert("验证没通过! ");
+                    return;
+                }
+
+                var postData = $("#volunteerForm").GetPostData();
+
+                HammerAjax('/account/active/VolunteerJson', postData, function (data) {
+                    if (data.Tag == 1) {
+                        alert("新增成功！");
+                        AddList(data.Result);
+                        removeI();
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                });
+            }
+
+            function AddList(result) {
+                var a = result.split(',');
+                $("#volunteerList").after("<div class='row'><label>类型：</label>" + a[0] + "<cite></cite><label>人数：</label>" + a[1] + "<cite></cite> <a href='javascript:void(0);' onclick='DelVolunteer(" + a[2] + ")' style='color: white;padding: 2px 3px;'  class='btn_log2 btn_submit'>删除</a>");
+            }
+
+            function DelVolunteer(obj) {
+                HammerAjax('/account/active/DeleteVolunteer', { id: obj }, function (data) {
+                    if (data.Tag == 1) {
+                        alert("删除成功！");
+                        $(this).parent().remove();
+                    }
+                    else {
+                        alert(data.Message);
+                    }
+                });
+
+            }
+
+            function AddVolunteer() {
+                $("#alert_xwl_login").show();
+
+                var height = $(window).height();
+                var imgH = $("#alert_xwl_login").height();
+                var imgW = $("#alert_xwl_login").width();
+                //alert(imgW);
+                //$("#alert_xwl_login").height((height - imgH) / 2);
+                $("#alert_xwl_login").css("top", (height - imgH) / 2 + "px");
+                $("#alert_xwl_login").css("left", (1200 - imgW) / 2 + "px");
+            }
+
+            $(function () {
+                $("#alert_xwl_login").hide();
+
+            });
+        </script>
+        <style>
+            .alert_xwl
+            {
+                position: fixed;
+                z-index: 200;
+            }
+            .login
+            {
+                max-width: 900px;
+                max-height: 750px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .login .C .login2area img
+            {
+                max-width: 800px;
+                max-height: 700px;
+            }
+            .login .C
+            {
+                background: #fff;
+                padding: 20px 40px;
+                border: 5px solid #B2B2B2;
+            }
+            .close_poparea span
+            {
+                position: absolute;
+                right: 13px;
+                top: 7px;
+                width: 20px;
+                height: 20px;
+                text-indent: -99px;
+                overflow: hidden;
+                background: url(/App_Themes/Site/images/ico_close1.png) no-repeat 1px 1px;
+                cursor: pointer;
+            }
+            .login2area
+            {
+                padding: 20px 0;
+                margin: 0 auto;
+            }
+        </style>
+        <div class="row">
+            <a style="color: Red;" href="javascript:void(0);" onclick="AddVolunteer()">增加</a>
+        </div>
+        <div id="volunteerList">
+        </div>
+    </div>
+</div>

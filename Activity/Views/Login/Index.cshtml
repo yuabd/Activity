@@ -1,0 +1,75 @@
+﻿@model Activity.Models.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "登录";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@section scripts{
+    <script>
+        function Login() {
+            if (!$.validatebox.valid()) {
+                return;
+            }
+
+            var postData = getFormJson($('#Form'));
+
+            HammerAjax('/login/index', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("登录成功!");
+                    if (data.Result == 1) {
+                        window.location.href = "/admin/active";
+                    } else {
+                        window.location.href = "/account/profile/index";
+                    }
+                } else {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}
+<div class="indexLert">
+    <div class="submenu">
+        @Html.Partial("MenuList")
+    </div>
+</div>
+<div class="content">
+    <div class="leftBox">
+        <div class="mbox_l">
+            <form id="Form">
+            <h3>
+                登录<span>没有活动账号？<a href="/login/register">立即注册！</a></span></h3>
+            <div class="fix mb10" style="overflow: hidden; _height: 1%;">
+                <div class="subt pt7">
+                    <p>
+                        <strong><span>*</span>用户名：</strong></p>
+                </div>
+                <div class="formwrap1">
+                    <div class="con1">
+                        <input value="" onkeydown="if(event.keyCode==13)Login()" class="easyui-validatebox validatebox-text"
+                            validtype="required(用户名)" name="UserID" id="UserID" type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="fix mb10" style="overflow: hidden; _height: 1%;">
+                <div class="subt pt7">
+                    <p>
+                        <strong><span>*</span>密码：</strong></p>
+                </div>
+                <div class="formwrap1">
+                    <div class="con1">
+                        <input class="easyui-validatebox validatebox-text" onkeydown="if(event.keyCode==13)Login()"
+                            validtype="required(密码)" name="Password" id="password" type="password">
+                    </div>
+                </div>
+            </div>
+            <div class="fwtk">
+                <input id="rememberMe" value="Y" checked="checked" name="RememberMe" type="checkbox">
+                记住账户</div>
+            <div class="new_log_btn">
+                <input id="submit" onclick="Login()" value="登录" class="btn_log2 btn_submit" type="button">
+            </div>
+            </form>
+        </div>
+    </div>
+    @Html.Partial("_Sidebar")
+</div>

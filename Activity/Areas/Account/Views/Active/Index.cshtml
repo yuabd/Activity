@@ -1,0 +1,41 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Active>
+@{
+	ViewBag.Title = "活动列表";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+<div class="content">
+	<div class="leftBox">
+		<h3 style="font-size: 20px; margin-bottom: 20px;">
+			活动列表</h3>
+		<div style="width: 681px; background: #f2f2f2; overflow: hidden; padding: 10px;">
+			@foreach (var item in Model)
+   {
+	   int? count = item.Applies.Sum(m => m.People ?? 0);
+				<div class="list-active">
+					<div class="imgBox">
+						<em><a href="/home/detail/@item.ActiveID" target="_blank" title="@item.Title">
+							<img src="@item.PictureFolder/@item.PictureFile"
+						 alt="@item.Title" title="@item.Title" style="width: 83px;">
+						</a></em>
+					</div>
+					<div class="conBox">
+						<span><a href="/home/detail/@item.ActiveID" target="_blank" title="@item.Title">
+							@item.Title</a></span><br>
+						地点：@item.Address<br>
+						时间：@(((DateTime)item.StartDate).ToShortDateString())—@(((DateTime)item.EndDate).ToShortDateString())<br>
+						人数：@item.People<br />
+						经费：@item.Price<br />
+					</div>
+					<div class="scoreBox">
+						<span class="people">@count/@item.People</span> <span class="exp"><a href="/account/active/activeapplies/@item.ActiveID">
+							报名情况</a></span>
+					</div>
+				</div>
+   }
+			@Model.Pager("pager")
+		</div>
+	</div>
+	<div class="rightBox">
+		@Html.Partial("_Count")
+	</div>
+</div>

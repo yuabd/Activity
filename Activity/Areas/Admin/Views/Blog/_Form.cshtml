@@ -1,0 +1,91 @@
+﻿@model Activity.Models.Blog
+
+<script type="text/javascript">
+	$(function () {
+		$("#DateCreated").datepicker();
+	});
+</script>
+
+<div class="section">
+	<div class="section-header">
+		<h3>标题</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+		@Html.TextBoxFor(m => m.BlogTitle, new { @class = "title" }) <cite>*</cite>
+		@Html.ValidationMessageFor(m => m.BlogTitle)
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>内容</h3>
+	</div>
+	<div class="section-body">
+		@Html.TextAreaFor(m => m.BlogContent, new { @rows = 30 , style="width: 100%" })
+	</div>
+</div>
+@Html.HiddenFor(m => m.CategoryID)
+<div class="section">
+	<div class="section-header">
+		<h3>创建</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+		<label>作者 <b>@Model.AuthorID</b> 于</label>
+		@Html.TextBoxFor(m => m.DateCreated)
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>状态</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+		@Html.CheckBoxFor(m => m.IsPublic) 显示主页
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>图片</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			<input type="file" name="PictureFile" /> 当前: <a href="@Model.PictureFolder/@Model.PictureFile" target="_blank">@Model.PictureFile</a> <br />
+			规格 (W x H): 640 x 280 / 格式: JPG
+		</div>
+	</div>
+</div>
+<div class="section">
+	<div class="section-header">
+		<h3>SEO</h3>
+	</div>
+	<div class="section-body">
+		<div class="row">
+			<label>页面标题:</label>
+			@Html.TextBoxFor(m => m.PageTitle, new { @class = "large" })
+			@Html.ValidationMessageFor(m => m.PageTitle)
+			<dfn>如果留空, 将由文章标题生成</dfn>
+		</div>
+		<div class="row">
+			<label class="textarea">页面描述:</label>
+			@Html.TextAreaFor(m => m.MetaDescription, new { @class = "large" })
+			@Html.ValidationMessageFor(m => m.MetaDescription)
+		</div>
+		<div class="row">
+			<label>页面关键字:</label>
+			@Html.TextBoxFor(m => m.MetaKeywords, new { @class = "large" })
+			@Html.ValidationMessageFor(m => m.MetaKeywords)
+			<dfn>多个关键字之间用,号隔开</dfn>
+		</div>
+		@Html.HiddenFor(m => m.Slug)
+		@*<div class="row">
+			<label>Url:</label>
+			@Html.TextBoxFor(m => m.Slug, new { @class = "large" })
+			@Html.ValidationMessageFor(m => m.Slug)
+			<dfn>如果留空, 将由文章标题生成</dfn>
+		</div>*@
+	</div>
+</div>

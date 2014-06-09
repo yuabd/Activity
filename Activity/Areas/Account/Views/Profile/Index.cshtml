@@ -1,0 +1,114 @@
+﻿@model Activity.Models.User
+@{
+    ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section scripts{
+	<script>
+		$(function () {
+			$("#Gender").val('@Model.Gender');
+		});
+		function Save() {
+			if (!$.validatebox.valid()) {
+				return;
+			}
+
+			var postData = getFormJson($('#Form'));
+
+			HammerAjax('/account/profile/index', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("修改成功！");
+					window.location.href = "/account/profile/index";
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+	</script>
+}
+
+<div class="content">
+	<div class="leftBox">
+		<div class="mbox_l">
+			<form id="Form">
+			<h3>我的资料<span>完善资料，方便活动中取得联系</span></h3>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong><span>*</span>用户名：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.UserID" class="easyui-validatebox validatebox-text" disabled="disabled" name="UserID" id="UserID" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong>姓名：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.Name" class="easyui-validatebox validatebox-text" name="Name" id="Name" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong><span>*</span>姓别：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<select name="Gender" id="Gender" validtype="required(性别)" class="easyui-validatebox" >
+							<option value="">请选择性别</option>
+							<option value="男">男</option>
+							<option value="女">女</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong><span>*</span>单位名称：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.City" class="easyui-validatebox validatebox-text" validtype="required(单位名称)" name="City" id="City" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong>生日：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.BirthDay" class="easyui-validatebox validatebox-text" name="BirthDay" id="BirthDay" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong><span>*</span>邮箱：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.Email" class="easyui-validatebox validatebox-text" validtype="required(邮箱)|email" name="Email" id="Email" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong>联系方式：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<input value="@Model.Contact" class="easyui-validatebox validatebox-text" validtype="Phone" name="Contact" id="Contact" type="text" />
+					</div>
+				</div>
+			</div>
+			<div class="fix mb10" style="overflow: hidden; _height: 1%;">
+				<div class="subt pt7"><p><strong>简介：</strong></p></div>
+				<div class="formwrap1">
+					<div class="con1">
+						<textarea class="easyui-validatebox validatebox-text"
+						 validtype="maxLen(300)" name="Summary" id="Summary">@Model.Summary</textarea>
+					</div>
+				</div>
+			</div>
+			<div class="new_log_btn">
+				<input id="submit" onclick="Save()" value="修改" class="btn_log2 btn_submit" type="button" />  
+			</div>
+			</form>
+		</div>
+	</div>
+	<div class="rightBox">
+		@Html.Partial("_Count")
+	</div>
+</div>

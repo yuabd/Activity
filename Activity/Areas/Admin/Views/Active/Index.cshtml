@@ -1,0 +1,88 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Active>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+	<script type="text/javascript">
+		function del(id) {
+			if (confirm("确认要删除该记录吗?")) {
+				HammerAjax('/admin/active/delete', { id: id }, function (result) {
+					if (result.Tag == 1) {
+						alert("删除成功!");
+						window.location.href = "/admin/active/index";
+					}
+					else {
+						alert("删除失败!");
+					}
+				});
+			}
+			return;
+		}
+
+		$(function () {
+			$("#photo").dialog({ autoOpen: false, modal: true, title: '审核宣传广告', width: 550 });
+		});
+
+		function photo(id, activeID) {
+			$("#adsphoto").attr('src', '/content/images/' + id);
+			$('#ActiveID').val(activeID);
+			$("#photo").dialog("open");
+		}
+
+		function addphoto() {
+			if (confirm("确认要选该图片为宣传图吗?")) {
+				var id = $("#ActiveID").val();
+				HammerAjax('/admin/active/AddPhoto', { id: id }, function (result) {
+					if (result.Tag == 1) {
+						alert("增加成功!");
+						window.location.href = "/admin/picture/index";
+					}
+					else {
+						alert("失败!");
+					}
+				});
+			}
+			return;
+		}
+	</script>
+
+}
+<div id="photo">
+	<img id="adsphoto" style="width: 450px;"/>
+	<input type="hidden" id="ActiveID" /> <br/><br/>
+	<input type="button" value="审核通过" onclick="addphoto()"/>
+</div>
+<h2>活动列表</h2>
+<p>
+	<a href="/Admin/Active/Add" class="button-add">新增</a>
+</p>
+<table class="grid">
+	<tr>
+		<th>活动编号</th>
+		<th>活动图片</th>
+		<th>活动名称</th>
+		<th>创建时间</th>
+		<th>活动时间</th>
+		<th>场地</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+ {
+	 <tr>
+		 <td>@item.ActiveID</td>
+		 <td><img src="@item.PictureFolder/@item.PictureFile" style="width: 80px" /></td>
+		<td>@item.Title</td>
+		<td>@item.DateCreated.ToString()</td>
+		<td>@item.StartDate - @item.EndDate</td>
+		<td>@item.Address</td>
+		<td>
+			<a href="/admin/active/edit/@item.ActiveID" class="button-edit">编辑</a>
+			<a href="/admin/active/People/@item.ActiveID" class="button">报名情况</a>
+			<a href="javascript:void(0);" onclick="photo('@item.HomePictureFile','@item.ActiveID')" class="button">宣传图</a>
+			<a href="/admin/active/delete/@item.ActiveID" onclick="del('@item.ActiveID')" class="button-delete delete">删除</a>
+		</td>
+	 </tr>
+ }
+</table>
+@Model.Pager("pager")

@@ -1,0 +1,100 @@
+﻿@model Activity.Models.Active
+@{
+	ViewBag.Title = "Add";
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+	<link href="/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+	<script src="/uploadify/swfobject.js" type="text/javascript"></script>
+	<script src="/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+    <link href="/Plugins/WDatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+    <script src="/Plugins/WDatePicker/WdatePicker.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		function Add() {
+			if (!$.validatebox.valid()) {
+				return;
+			}
+
+			var postData = $('#Form').serializeArray();
+			var url = $("#LogoImgURL").val();
+
+			postData.push({ name: 'pictureFile', value: url });
+			postData.push({ name: "HomePictureFile", value: $("#LogoImgURL1").val() });
+
+			HammerAjax('/admin/active/add', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("新增成功!");
+					window.location.href = "/admin/active/index";
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+
+		$(function () {
+		    //$(".date").datepicker({ dateFormat: 'yy-mm-dd' });
+			$(".content").xheditor({ upImgUrl: "/Upload/UploadPicture", upFlashUrl: "/Upload/UploadVideo", upFlashExt: 'swf', upMediaUrl: "/Upload/UploadVideo", upMediaExt: "wmv,avi,wma,mp3,mp4,mid,swf", upImgExt: "jpg,jpeg,gif,png", html5Upload: false });
+
+			$("#uploadify1").uploadify({
+				'uploader': "/uploadify/uploadify.swf?t=" + new Date().getTime(),
+				'script': "/Upload/UploadImage",
+				'cancelImg': "/uploadify/cancel.png",
+				'queueID': 'fileQueue1',
+				'folder': '/Content/Images/',
+				'wmode': 'opaque',
+				'auto': true,
+				'multi': false,
+				'buttonImg': "/uploadify/UpImg.gif",
+				'width': '65',
+				'height': '27',
+				'fileDesc': '*.gif;*.jpg;*.jpeg;*.png',
+				'fileExt': '*.gif;*.jpg;*.jpeg;*.png',
+				'sizeLimit': 1024 * 500,
+				'onSelect': function (e, fileObj) {
+				},
+				'onComplete': function (event, queueID, fileObj, response, data) {
+					var obj = eval('(' + response + ')');
+					$("#LogoImgURL1").val(obj.imgUrl);
+					$("#LogoImgID1").val(obj.queueID);
+					$("#showImg1").attr("src", '/content/images/' + obj.imgUrl);
+					$("#showImg1").show();
+				}
+			});
+
+			$("#uploadify").uploadify({
+				'uploader': "/uploadify/uploadify.swf?t=" + new Date().getTime(),
+				'script': "/Upload/UploadImage",
+				'cancelImg': "/uploadify/cancel.png",
+				'queueID': 'fileQueue',
+				'folder': '/Content/Images/',
+				'wmode': 'opaque',
+				'auto': true,
+				'multi': false,
+				'buttonImg': "/uploadify/UpImg.gif",
+				'width': '65',
+				'height': '27',
+				'fileDesc': '*.gif;*.jpg;*.jpeg;*.png',
+				'fileExt': '*.gif;*.jpg;*.jpeg;*.png',
+				'sizeLimit': 1024 * 500,
+				'onSelect': function (e, fileObj) {
+				},
+				'onComplete': function (event, queueID, fileObj, response, data) {
+					var obj = eval('(' + response + ')');
+					$("#LogoImgURL").val(obj.imgUrl);
+					$("#showImg").attr("src", '/content/images/' + obj.imgUrl);
+					$("#showImg").show();
+				}
+			});
+		});
+	</script>
+}
+<h2>
+	发布新活动</h2>
+<form id="Form">
+@Html.Partial("_Form")
+<div class="section">
+	<a onclick="Add()" class="button-add">新增</a>
+</div>
+</form>

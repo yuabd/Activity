@@ -1,0 +1,129 @@
+﻿@model Activity.Models.Active
+@{
+	ViewBag.Title = "编辑活动";
+	Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@section head{
+	<link href="/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+	<link href="/App_Themes/black-tie/jquery-ui-1.8.13.custom.css" rel="stylesheet" type="text/css" />
+    <link href="/Plugins/WDatePicker/skin/WdatePicker.css" rel="stylesheet" type="text/css" />
+}
+@section scripts{
+	<script src="/Scripts/jquery-ui.min.js" type="text/javascript"></script>
+	<script src="/uploadify/swfobject.js" type="text/javascript"></script>
+	<script src="/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+	<script src="/Plugins/xheditor/xheditor-1.1.14-zh-cn.min.js" type="text/javascript"></script>
+    <script src="/Plugins/WDatePicker/WdatePicker.js" type="text/javascript"></script>
+
+	<script type="text/javascript">
+		function Save() {
+			if (!$.validatebox.valid()) {
+				alert("验证没通过! ");
+				return;
+			}
+
+			var postData = $("#Form").serializeArray();
+			var url = $("#LogoImgURL").val();
+			postData.push({ name: 'pictureFile', value: url });
+			postData.push({ name: "HomePictureFile", value: $("#LogoImgURL1").val() });
+
+
+			HammerAjax('/account/active/edit', postData, function (data) {
+				if (data.Tag == 1) {
+					alert("修改成功！");
+					window.location.href = "/account/active/Wait";
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+
+		$(function () {
+			if ('@Model.IsDiscuss' == "Y") {
+				$("#IsDiscuss").attr("checked", "checked");
+			}
+			$(".content").xheditor({ upImgUrl: "/Upload/UploadPicture", upImgExt: "jpg,jpeg,gif,png", upFlashUrl: "/Upload/UploadVideo", upFlashExt: 'swf', upMediaUrl: "/Upload/UploadVideo", upMediaExt: "wmv,avi,wma,mp3,mp4,mid,swf", html5Upload: false });
+
+			$("#showImg").attr("src", '/content/images/' + '@Model.PictureFile');
+			$("#showImg").show();
+			$("#showImg1").attr("src", '/content/images/' + '@Model.HomePictureFile');
+			$("#showImg1").show();
+
+			$("#uploadify1").uploadify({
+				'uploader': "/uploadify/uploadify.swf?t=" + new Date().getTime(),
+				'script': "/Upload/UploadImage",
+				'cancelImg': "/uploadify/cancel.png",
+				'queueID': 'fileQueue1',
+				'folder': '/Content/Images/',
+				'wmode': 'opaque',
+				'auto': true,
+				'multi': false,
+				'buttonImg': "/uploadify/UpImg.gif",
+				'width': '65',
+				'height': '27',
+				'fileDesc': '*.gif;*.jpg;*.jpeg;*.png',
+				'fileExt': '*.gif;*.jpg;*.jpeg;*.png',
+				'sizeLimit': 1024 * 500,
+				'onSelect': function (e, fileObj) {
+				},
+				'onComplete': function (event, queueID, fileObj, response, data) {
+					var obj = eval('(' + response + ')');
+					$("#LogoImgURL1").val(obj.imgUrl);
+					$("#LogoImgID1").val(obj.queueID);
+					$("#showImg1").attr("src", '/content/images/' + obj.imgUrl);
+					$("#showImg1").show();
+				}
+			});
+
+			$("#uploadify").uploadify({
+				'uploader': "/uploadify/uploadify.swf?t=" + new Date().getTime(),
+				'script': "/Upload/UploadImage",
+				'cancelImg': "/uploadify/cancel.png",
+				'queueID': 'fileQueue',
+				'folder': '/Content/Images/',
+				'wmode': 'opaque',
+				'auto': true,
+				'multi': false,
+				'buttonImg': "/uploadify/UpImg.gif",
+				'width': '65',
+				'height': '27',
+				'fileDesc': '*.gif;*.jpg;*.jpeg;*.png',
+				'fileExt': '*.gif;*.jpg;*.jpeg;*.png',
+				'sizeLimit': 1024 * 500,
+				'onSelect': function (e, fileObj) {
+				},
+				'onComplete': function (event, queueID, fileObj, response, data) {
+					var obj = eval('(' + response + ')');
+					$("#LogoImgURL").val(obj.imgUrl);
+					$("#LogoImgID").val(obj.queueID);
+					$("#showImg").attr("src", '/content/images/' + obj.imgUrl);
+					$("#showImg").show();
+				}
+			});
+
+            function AddVolunteer() {
+                //alert(1);
+                var html = "<div class='row'><label>类型：</label><input type='text' class='textbox volunteerType' /><cite></cite><label>人数：</label><input type='text' class='textbox volunteerPeople' /> <a href='javascript:void(0);' onclick='DelVolunteer(this)'>删除</a>";
+                //alert($(this).parent().find(".volunteerType").val());
+                $("#volunteerForm").append(html);
+            }
+
+            function DelVolunteer(obj) {
+                $(obj).parent().remove();
+            }
+		});
+	</script>
+}
+<div class="content">
+	<form id="Form">
+	<h3 style="font-size: 20px; margin-bottom: 20px;">
+		编辑活动<span></span></h3>
+	@Html.Partial("_Form")
+	@Html.HiddenFor(m => m.EndDate)
+	@Html.HiddenFor(m => m.StartDate)
+	<div class="new_log_btn">
+		<input id="submit" onclick="Save()" value="修改" class="btn_log2 btn_submit" type="button" />
+	</div>
+	</form>
+</div>

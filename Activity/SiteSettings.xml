@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<siteSettings>
+  <companyName value="厦门市公安局机关团委活动网站" />
+  <companyNameFull value="活动" />
+  <companyWebsite value="http://10.130.188.24:8008/" />
+  <companyEmail value="admin@54.com" />
+  <companyEmailAuto value="厦门市公安局机关团委@54.com" />
+  <companyPhoneNo value="2262145" />
+  <showName value="true" />
+  <Notice value="本网站平台属于警营里的每一份子，任何人都可以来发起活动、组织活动、分享活动~~~&#xA;&#xA;只要您有开展活动的任何需求，都可以在此发布，必要的审核后，即可发起、组织，我们还将根据情况给予物资、政策、协调资源等方面的支持。&#xA;&#xA;" />
+  <IsShowBox value="false" />
+  <HomeBoxUrl value="" />
+</siteSettings>

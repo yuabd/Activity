@@ -1,0 +1,140 @@
+﻿@model Activity.Models.Vote
+@{
+	ViewBag.Title = Model.VoteName;
+	Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@section scripts{
+	<script>
+		function Vote() {
+			var id = $("#ID").val();
+			var str = "";
+			$(".checkVote:checked").each(function (i, v) {
+				str += $(this).val() + ";";
+			});
+			if (str == "") {
+				alert("请选择投票选项!");
+				return;
+			}
+
+			HammerAjax('/home/UserVote', { VoteID: id, VoteDetailID: str }, function (data) {
+				if (data.Tag == 1) {
+					alert("投票成功!");
+					window.location.reload();
+				}
+				else {
+					alert(data.Message);
+				}
+			});
+		}
+		function getRandom(n) {
+			return Math.floor(Math.random() * n + 1)
+		}
+
+		$(function () {
+			var arr = ['red', 'green', 'blue', 'pink'];
+			var count = $("#TotalCount").val();
+			var every = 300 / count;
+			var i = 0;
+			$("#VoteDet li").each(function (i, v) {
+				var detCount = $(this).find(".count").val();
+				var width = every * detCount;
+				var percent = ((detCount / count) * 100).toFixed(2);
+				var FinPercent = 0;
+				if (!isNaN(percent)) {
+					FinPercent = percent;
+				}
+				$(this).find(".percent").html(detCount + "票, " + FinPercent);
+				$(this).find(".Pancolor").width(width);
+				var i1 = getRandom(255);
+				var i2 = getRandom(255);
+				var i3 = getRandom(255);
+				$(this).find(".Pancolor").css("background", "rgb(" + i1 + "," + i2 + "," + i3 + ")");
+				i++;
+			});
+		});
+	</script>
+}
+<div class="indexLert">
+	<div class="submenu">
+		@Html.Partial("MenuList")
+	</div>
+</div>
+<div class="content">
+	<input type="hidden" value="@ViewBag.Count" id="TotalCount" />
+	<div class="leftBox">
+		<h3 class="voteTitle">
+			@*投票中心*@
+		</h3>
+		<div style="width: 681px; background: #f2f2f2; overflow: hidden; padding: 10px;">
+			<h2>@Model.VoteName</h2>
+			<p>
+				@Html.Raw(Model.Description)
+			</p>
+			@{var str = "";
+	 if (Model.IsSingle == "Y")
+	 {
+		 str = "radio";
+	 }
+	 else
+	 {
+		 str = "checkbox";
+	 }}
+			选项:
+			<ul id="VoteDet" style="overflow: hidden;">
+				@foreach (var item in ViewBag.Details)
+	{
+					<li>
+						<div style="width: 100%; display: block; overflow: hidden; line-height: 30px;">
+							<div style="width: 150px; text-align: left; margin-right: 5px;">
+								<input class="checkVote" name="voteDetail" type="@str" value="@item.ID" />
+								@item.Name :
+							</div>
+							<div id="@item.ID" style="border: 1px solid #111;display: block; float: left; width: 300px; height: 20px;">
+								<div class="Pancolor" style="display: inline-block; background: #111; height: 20px;">
+								</div>
+							</div>
+							<div class="percent" style="display: inline-block;">
+							</div>
+							%
+							<input type="hidden" value="@item.Count" class="count" />
+						</div>
+					</li>
+	}
+			</ul>
+			<input type="hidden" value="@Model.ID" id="ID" />
+			<p>
+				@if (Model.EndDate <= DateTime.Now)
+	{
+					<a href="javascript:void(0);" class="button">已结束</a>
+	}
+	else
+	{
+		if (Model.IsLogin == "Y")
+		{
+			if (ViewBag.IsVoted == "N")
+			{
+				if (!User.Identity.IsAuthenticated)
+				{
+					<a href="/Login/Index" class="button">请先登录!</a>
+				}
+				else
+				{
+					<a href="javascript:void(0);" class="button" onclick="Vote()">投票</a>
+				}
+
+			}
+			else
+			{
+					<a href="javascript:void(0);" class="button">您已投过票!</a>
+			}
+		}
+		else
+		{
+					<a href="javascript:void(0);" class="button" onclick="Vote()">投票</a>
+		}
+	}
+			</p>
+		</div>
+	</div>
+	@Html.Partial("_Sidebar")
+</div>

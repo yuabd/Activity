@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Hammer.Core.Models.Blog>
+
+@{
+    ViewBag.Title = "Pending comments";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section Head{
+	<script type="text/javascript">
+		$(function () {
+			$(".delete-button").button({ icons: { primary: 'ui-icon-close' }, text: false });
+			$(".approve-button").button({ icons: { primary: 'ui-icon-check' }, text: false });
+		});
+	</script>
+}
+
+<h2>Pending comments</h2>
+
+<table class="grid">
+	<tr>
+		<th>
+			Blog #
+		</th>
+		<th>
+			Author
+		</th>
+		<th>
+			Date
+		</th>
+		<th>
+			Title
+		</th>
+		<th>
+			Visited
+		</th>
+	</tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.BlogID
+        </td>
+		<td>
+            @item.AuthorID
+        </td>
+		<td>
+            @String.Format("{0:d}", item.DateCreated)
+        </td>
+		<td>
+            @item.BlogTitle
+        </td>
+		 <td>
+            @item.PageVisits
+        </td>
+    </tr>
+	foreach (var comment in item.BlogComments.Where(m => m.IsPublic == false))
+	{
+	<tr>
+		<td></td>
+		<td colspan="2">
+			@comment.Name<br />
+			<a href="mailto:@comment.Email">@comment.Email</a><br />
+			@comment.DateCreated.ToString("D")
+		</td>
+		<td>
+			@comment.Message
+		</td>
+		<td class="actions">
+			@Html.ActionLink("Approve", "ApproveComment", new { id = comment.CommentID }, new { @class = "approve-button" })
+			@Html.ActionLink("Delete", "DeleteComment", new { id = comment.CommentID }, new { @class = "delete-button" })
+		</td>
+	</tr>
+	}
+}
+
+</table>

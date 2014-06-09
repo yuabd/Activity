@@ -1,0 +1,78 @@
+﻿@using Activity.Models.Others
+@{var siteSettings = new Activity.Service.SysConfigHelper().GetSysConfig();}
+<div class="rightBox">
+	<div class="formwrap1 mb10 formwrap2" style="width: 250px;">
+		<div class="mosh_ad_1" style="background: white;">
+			<h2>
+				活动公告：
+			</h2>
+			<p style="text-indent: 2em;">@siteSettings.Notice</p>
+		</div>
+	</div>
+	<div class="formwrap1 mb10 formwrap2" style="width: 250px;">
+		<div class="title">
+			<a target="_blank" class="annce" href="/news/index/2">@*最新公告*@ </a>
+		</div>
+		<div class="bd_con2">
+			<ul class="s2">
+				@foreach (var item in Activity.Helpers.ListHelper.GetBlogs(2).Take(6))
+	{
+					<li><a title="@item.BlogTitle" 
+						   href="/news/detail/@item.ID" target="_blank">@item.BlogTitle</a> </li>
+	}
+			</ul>
+		</div>
+	</div>
+	<div class="formwrap1 mb10 formwrap2" style="width: 250px;">
+		<div class="title">
+			<a target="_blank" class="newsTitle" href="/news/index/1">@*最近新闻*@ </a>
+		</div>
+		<div class="bd_con2">
+			<ul class="s2">
+				@foreach (var item in Activity.Helpers.ListHelper.GetBlogs(1).Take(6))
+	{
+					<li><a title="@item.BlogTitle" 
+						   href="/news/detail/@item.ID" target="_blank">@item.BlogTitle</a> </li>
+	}
+			</ul>
+		</div>
+		@*<div class="tags">
+			@foreach (var item in Activity.Helpers.ListHelper.GetTags().Take(20))
+			{
+				<a class="tag mb10 green" href="/home/categories?tag=@item">@item</a>
+			}
+		</div>*@
+	</div>
+	<div class="formwrap1 mb10 formwrap2" style="width: 250px;">
+		<div class="title">
+			<a target="_blank" class="voteTitle" href="/Home/VoteList">@*投票中心*@ </a>
+		</div>
+		<div class="bd_con2">
+			<ul class="s2">
+				@foreach (var item in Activity.Helpers.ListHelper.GetVoteList().Take(6))
+	{
+					<li><a title="@item.VoteName" 
+						   href="/home/vote/@item.ID" target="_blank">@item.VoteName</a> </li>
+	}
+			</ul>
+		</div>
+	</div>
+	<div class="formwrap1 mb10 formwrap2" style="width: 250px;">
+		<div class="title">
+			<a target="_blank" class="disTitle" href="/news/index/3">@*投票中心*@ </a>
+		</div>
+		<div class="bd_con2">
+			<ul class="s2">
+				@foreach (var item in Activity.Helpers.ListHelper.GetBlogs(3).Take(6))
+	{
+					<li><a title="@item.BlogTitle" href="/news/detail/@item.ID" target="_blank">@item.BlogTitle</a>
+					</li>
+	}
+			</ul>
+		</div>
+	</div>
+	<div class=" mb10 formwrap2" style="width: 250px;">
+		<a target="_blank" href="ftp://54:54@10.130.188.24">
+			<img src="/content/images/我要领照片.jpg"></a>
+	</div>
+</div>

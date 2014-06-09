@@ -1,0 +1,74 @@
+﻿@model IEnumerable<Activity.Models.UserRole>
+
+@{
+    ViewBag.Title = "Roles";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section head {
+	<script src="/Scripts/jquery.validate.min.js" type="text/javascript"></script>
+	<script type="text/javascript">
+
+		$(function () {
+			$("#add").button({ icons: { primary: 'ui-icon-plus'} });
+			$("#add-form").dialog({ autoOpen: false, modal: true, title: 'Add User Role', width: 550 });
+			$("#add")
+				.click(function () {
+					$("#RoleID").val("");
+					$("#OldRole").val("");
+					$("#add-form").dialog("open");
+					$("#add-form").dialog({ title: 'Add User Role' });
+				});
+			$("#RoleForm").validate({
+				rules: {
+					RoleID: { required: true, maxlength: 15, remote: '/Admin/Settings/CheckRole' }
+				},
+				messages: {
+					RoleID: {
+						required: "<span style='color: red; margin-left: 10px;'>Required</span>",
+						maxlength: "<span style='color: red; margin-left: 10px;'>Maxlength is 15</span>",
+						remote: "<span style='color: red; margin-left: 10px;'>Already Exist</span>"
+					}
+				}
+			});
+		});
+
+		function Edit(roleID) {
+			$("#RoleID").val(roleID);
+			$("#OldRole").val(roleID);
+			$("#add-form").dialog("open");
+			$("#add-form").dialog({ title: 'Edit User Role' });
+		};
+
+	</script>
+}
+
+<div id="add-form">
+	<br />
+	<form action="/Admin/Settings/Roles" method="post" id="RoleForm">
+	 @Html.Hidden("OldRole")
+		<div class="row">
+			<label>RoleID:</label>
+			@Html.TextBox("RoleID")
+		</div>
+		<p><button type="submit">Save</button> or <a href="#" onclick="$('#add-form').dialog('close');">Cancel</a></p>
+	</form>
+</div>
+
+<h2>User Roles</h2>
+
+<p><a href="#" id="add">Add</a></p>
+
+<table class="grid">
+	<tr>
+		<th>Role</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+ {
+	<tr>
+		<td>@item.RoleID</td>
+		<td class="actions"><a href="#" onclick="Edit('@item.RoleID')">Edit</a> | <a href="/Admin/Settings/DeleteRole/@item.RoleID">Delete</a></td>
+	</tr> 
+ }
+</table>

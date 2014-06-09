@@ -1,0 +1,72 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Vote>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@section head{
+    <script>
+        function Delete(id) {
+            HammerAjax('/admin/Vote/DeleteJson', {id: id}, function (data) {
+                if (data.Tag == 1) {
+                    alert("删除成功!");
+                    window.location.href = "/admin/Vote/index";
+                }
+                else {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}
+<h2>投票</h2>
+<p>
+    <a href="/Admin/Vote/Add" class="button-add">新增投票</a>
+</p>
+<table class="grid">
+	<tr>
+		<th>投票名称</th>
+		<th>时间</th>
+        <th>选项</th>
+        <th>投票者限制</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+ {
+	<tr>
+        <td>@item.VoteName</td>
+        <td>
+            @if(string.IsNullOrEmpty(item.EndDate.ToString()))
+            {
+                <span>无时间限制</span>
+            }
+            else
+            {
+                <span>@item.StartDate.ToShortDateString() - @item.EndDate</span>
+            }
+        </td>
+        <td>@if (item.IsSingle == "Y")
+            {
+                <span>单选</span>
+            }
+            else
+            {
+                <span>多选</span>
+            }
+        </td>
+		<td>
+        @if (item.IsLogin == "N")
+        {
+          <span>无限制</span>
+        }
+        else
+        {
+          <span>登录用户</span>
+        }
+        </td>
+		<td class="actions">
+		    <a href="/admin/Vote/Edit/@item.ID" class="button-edit">编辑</a>
+		    <a href="javascript:void(0);" onclick="Delete('@item.ID')" class="button-delete delete">删除</a>
+		</td>
+	</tr> 
+ }
+</table>

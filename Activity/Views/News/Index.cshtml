@@ -1,0 +1,54 @@
+﻿@model Activity.Models.Paginated<Activity.Models.Blog>
+@{
+	ViewBag.Title = "Index";
+	Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+@*94142002*@
+<div class="indexLert">
+	<div class="submenu">
+		@Html.Partial("MenuList")
+	</div>
+</div>
+<div class="content">
+	<div class="leftBox">
+		@if (ViewBag.Category.CategoryID == 2)
+  {
+			<h3 class="annce">
+			</h3>
+  }
+  else if(ViewBag.Category.CategoryID == 1)
+  {
+			<h3 class="newsTitle">
+				@*@ViewBag.Category.CategoryName*@
+			</h3>
+  }
+  else if(ViewBag.Category.CategoryID == 3)
+  {
+			<h3 class="disTitle">
+				@*@ViewBag.Category.CategoryName*@
+			</h3>
+  }
+		<div style="width: 681px; background: #f2f2f2; overflow: hidden; padding: 10px;">
+			@foreach (var item in Model)
+   {
+				<div class="list-active">
+					<div class="imgBox">
+						<a title="ad" target="_blank" href="/news/detail/@item.ID">
+							<img style="width: 83px;" title="ad" alt="ad" src="@item.PictureFolder/@item.PictureThumbnail" />
+						</a>
+						<div class="btn_yellow mt10">@item.DateCreated.ToShortDateString()</div>
+					</div>
+					<div class="conBox">
+						<span><a title="ad" target="_blank" href="/news/detail/@item.ID">@item.BlogTitle</a></span><br />
+						@Html.Raw(Activity.Helpers.Utilities.GetFirstParagraph(item.BlogContent))
+					</div>
+					<div class="score">
+						<span class="exp">浏览量：@item.PageVisits</span>
+					</div>
+				</div>
+   }
+			@Model.Pager("pager")
+		</div>
+	</div>
+	@Html.Partial("_Sidebar")
+</div>

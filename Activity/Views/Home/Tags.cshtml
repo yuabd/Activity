@@ -1,0 +1,28 @@
+﻿@model Activity.Models.Paginated<Activity.Models.ActiveTag>
+@{
+    ViewBag.Title = "Tags";
+    Layout = "~/Views/Shared/_SiteLayout.cshtml";
+}
+
+<div class="indexLert">
+	<div class="submenu">
+		@Html.Partial("MenuList")
+	</div>
+</div>
+<div class="content">
+	<div class="leftBox all_tags">
+		<h2> 标签 </h2>
+		<ul>
+			@foreach (var item in Model)
+			{
+				<li>
+					<a title="@item.Tag" href="/home/Categories/?tag=@item.Tag">
+						@item.Tag
+					</a>
+				</li>
+			}
+		</ul>
+		@Model.Pager("pager")
+	</div>
+	@Html.Partial("_Sidebar")
+</div>

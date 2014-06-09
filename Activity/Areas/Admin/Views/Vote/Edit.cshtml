@@ -1,0 +1,157 @@
+﻿@model Activity.Models.ViewModels.VoteViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@section head{
+    <script type="text/javascript">
+        $(function () {
+            $("#IsLogin input[name='IsLogin'][value='@Model.Vote.IsLogin']").attr("checked", "checked");
+            $("#IsSingle input[name='IsSingle'][value='@Model.Vote.IsSingle']").attr("checked", "checked");
+
+//            $("#voteDetail").html("");
+//            $("#voteDetail").append("<div class='row' id='add'><a href='javascript:void(0);' onclick='Add()'>新增</a> | <a href='javascript:void(0);' onclick='Delete()'>删除</a></div>");
+//            $.each(, function (i, v) {
+//                $("#add").before("<div class='row clear'><span class='count'>" + (i + 1) + "</span>：<input type='hidden' value=" + v.ID + " class='VoteValue' /><input type='text' class='large field-idle' name='name' value='" + v.Name + "' /></div>");
+//            });
+        });
+        function Save() {
+            if (!$.validatebox.valid()) {
+                return;
+            }
+
+            var postData = $('#Form').serializeArray();
+            //var postData
+            var name = $("#voteDetail .clear");
+            var names = "";
+            name.each(function (i, v) {
+                var n = $(this).find("input[name='name']").val();
+                var v = $(this).find(".VoteValue").val();
+                if (isNaN(v)) {
+                    v = 0;
+                }
+                names += v + "," + n + ";";
+            });
+            //alert(names);
+            names = names.substring(0, names.length -1);
+
+            if (names.split(';').length < 2) {
+                alert("选项不能少于2个!!");
+                return;
+            }
+
+            postData.push({ name: 'names', value: names });
+            var isSingle = $("#IsSingle input[name='IsSingle']:checked").val();
+            postData.push({ name: 'IsSingle', value: isSingle });
+            var isLogin = $("#IsLogin input[name='IsLogin']:checked").val();
+            postData.push({ name: 'IsLogin', value: isLogin });
+
+            HammerAjax('/admin/Vote/EditJson', postData, function (data) {
+                if (data.Tag == 1) {
+                    alert("修改成功!");
+                    window.location.href = "/admin/Vote/index";
+                }
+                else {
+                    alert(data.Message);
+                }
+            });
+        }
+    </script>
+}
+
+<h2>编辑投票</h2>
+<form id="Form">
+    <div class="section">
+        <div class="section-header">
+            <h3>投票标题</h3>
+        </div>
+        <div class="section-body">
+            <input type="text" class="title" validtype="required(投票标题)" value="@Model.Vote.VoteName" name="VoteName" /><cite>*</cite>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-header">
+            <h3>描述</h3>
+        </div>
+        <div class="section-body">
+            <textarea class="textarea" validtype="required(描述)" name="Description">@Model.Vote.Description</textarea><cite>*</cite>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-header">
+            <h3>时间设置</h3>
+        </div>
+        <div class="section-body">
+            <div class="row">
+                <label>结束时间:</label>
+                <input type="text" value="@Model.Vote.EndDate" class="date" name="EndDate" /><dfn>留空表示不做时间限制</dfn>
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-header">
+            <h3>投票设置</h3>
+        </div>
+        <div class="section-body">
+            <div class="row" id="IsSingle">
+                <label>选项设置:</label>
+                <input type="radio" name="IsSingle" value="Y" checked="checked" />单选
+                <input type="radio" name="IsSingle" value="N" />多选
+            </div>
+            <div class="row" id="IsLogin">
+                <label>投票者设置:</label>
+                <input type="radio" name="IsLogin" value="Y" checked="checked" />登录用户
+                <input type="radio" name="IsLogin" value="N" />无限制
+            </div>
+        </div>
+    </div>
+    @*@Html.HiddenFor(m => m.Vote.ID)*@
+    <input type="hidden" name="ID" value="@Model.Vote.ID" />
+	<div class="section">
+        <div class="rows">
+            <a class="button" onclick="Save()">保存</a>
+        </div>
+    </div>
+    <div class="section">
+        <div class="section-header">
+            <h3>投票选项</h3>
+        </div>
+        <div class="section-body" id="voteDetail">
+
+        @{int i = 1;
+          foreach (var item in Model.VoteDetails)
+          {
+            <div class="row clear"><span class="count">@i</span>：<input type="hidden" value="@item.ID" class="VoteValue" /><input disabled="disabled" type="text" class="large field-idle" name="name" value="@item.Name" />
+            <a href="/Admin/Vote/EditDetailView/@item.ID">编辑</a>
+            </div>
+              i++;
+          }
+          }  
+            <div class="row" id="add">
+                <a href="javascript:void(0);" onclick="Add()">新增</a> | <a href="javascript:void(0);" onclick="Delete()">删除</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function Add() {
+            var count = parseInt($("#voteDetail span.count").last().text());
+            count += 1;
+            var final = 1;
+            if (count) {
+                final = count;
+            }
+            $("#add").before("<div class='row clear'><span class='count'>" + final + "</span>：<input type='hidden' value='0' class='VoteValue' /><input type='text' class='large field-idle' name='name' /></div>");
+        }
+
+        function Delete() {
+            $("#voteDetail .row").eq(-2).remove();
+        }
+
+        $(function () {
+            $(".date").datepicker({ dateFormat: 'yy-mm-dd' });
+        });
+    </script>
+
+</form>
