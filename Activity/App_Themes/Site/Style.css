@@ -905,10 +905,6 @@ form .row cite
 	width: 400px;
 	background: #fff;
 	border: 1px solid #bcbab7;
-	top: 50%;
-	left: 50%;
-	margin-left: -150px !important; /*FF IE7 half of its width */
-	margin-top: -60px !important; /*FF IE7 half of its height*/
 	margin-top: 0px;
 	position: fixed !important; /*FF IE7*/
 	position: absolute; /*IE6*/

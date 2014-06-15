@@ -113,8 +113,10 @@
         </div>
         <div class="row">
             <label>志愿者人数：</label>
-            <input class="textbox" name="VolunteerCount" value="@Model.VolunteerCount" validtype="required(志愿者人数)|PositiveInteger" />
-            <dfn>如需要志愿者,则正常报名会在志愿者报名完成后开启</dfn>
+            <input class="textbox" name="VolunteerCount" value="@Model.VolunteerCount" validtype="required(志愿者人数)|PositiveInteger" /><cite></cite>
+            <label>优先完成志愿者报名：</label>
+            <input type="checkbox" col="IsVolunteerFirst" name="IsVolunteerFirst" id="IsVolunteerFirst" value="@Model.IsVolunteerFirst" />
+            @*<dfn>如需要志愿者,则正常报名会在志愿者报名完成后开启</dfn>*@
         </div>
     </div>
 </div>

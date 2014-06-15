@@ -74,6 +74,14 @@ namespace Activity.Service
                 return obj;
             }
 
+            if (active.StartDate < DateTime.Now)
+            {
+                obj.Tag = -2;
+                obj.Message = "开始时间不能小于当前时间";
+
+                return obj;
+            }
+
             if (active.StartDate > active.EndDate)
             {
                 obj.Tag = -2;
@@ -164,6 +172,14 @@ namespace Activity.Service
                 return obj;
             }
 
+            //if (activity.StartDate < DateTime.Now)
+            //{
+            //    obj.Tag = -2;
+            //    obj.Message = "开始时间不能小于当前时间";
+
+            //    return obj;
+            //}
+
             if (activity.StartDate > activity.EndDate)
             {
                 obj.Tag = -2;
@@ -195,6 +211,7 @@ namespace Activity.Service
             a.HomePictureFile = activity.HomePictureFile;
             a.PersonPhone = activity.PersonPhone;
             a.VolunteerCount = activity.VolunteerCount;
+            a.IsVolunteerFirst = activity.IsVolunteerFirst;
 
             if (activity.IsDiscuss == "on")
             {
@@ -553,7 +570,7 @@ namespace Activity.Service
                     return obj;
                 }
             }
-            else if(apply.Backup == "N")
+            else if (apply.Backup == "N")
             {
                 var active = db.Activities.Find(apply.ActiveID);
                 var applies = db.Applies.Where(m => m.ActiveID == apply.ActiveID && m.Backup == "N").ToList();

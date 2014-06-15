@@ -26,12 +26,31 @@
                     HammerAjax('/Login/UserInfo', { id: id }, function (data) {
                         $("#Name").val(data.UserID);
                         $("#Contact").val(data.Contact);
+                        $("#needPeople").html(data.NeedPeople);
                         $("#remind").html(data.Remind);
+                        $("#Backup").html(data.Option);
+
+//                        if (data.Option == "") {
+//                            alert("报名已满！");
+//                        }
                     });
+
+                    FixApplyForm();
 
                     $("#applyForm").show();
                 }
             });
+        }
+
+        function FixApplyForm() {
+            var winHeight = document.documentElement.clientHeight;
+            var winWidth = document.documentElement.clientWidth;
+
+            var height = $("#applyForm").height();
+            var width = $("#applyForm").width();
+
+            $("#applyForm").css("top", (winHeight - height) / 2);
+            $("#applyForm").css("left", (winWidth - width) / 2);
         }
 
         function submit() {
@@ -196,11 +215,12 @@
                     </div>
                     <div class="auto">
                         <p>
-                            需要志愿者人数：&nbsp;&nbsp;&nbsp;&nbsp;@Model.VolunteerCount</p>
+                            活动人数：&nbsp;&nbsp;&nbsp;&nbsp;@(Model.People + Model.VolunteerCount) ，其中志愿者人数@(Model.VolunteerCount)人，活动人数@(Model.People)人
+                        </p>
                     </div>
                     <div class="auto">
                         <p>
-                            报名情况：&nbsp;&nbsp;&nbsp;&nbsp;总人数： @Model.People, 报名人数：@count,其中成功报名为@(normalCount)人,候补报名@(backupCount)人,志愿者@(voluteerCount)人</p>
+                            报名情况：&nbsp;&nbsp;&nbsp;&nbsp;总人数：@count,其中成功报名为@(normalCount)人,候补报名@(backupCount)人,志愿者@(voluteerCount)人</p>
                     </div>
                     @if (siteSettings.IsShowName == true)
                     {
@@ -243,112 +263,21 @@
                     <div class="auto xomore2">
                         @if (Model.AlreadyApply == "N")
                         {
-                            if (voluteerCount >= Model.VolunteerCount)
+                            if (Model.Applies.Count < (int)((Model.People * 1.15) + Model.VolunteerCount))
                             {
-                                if (Model.People > normalCount)
-                                {
-                            <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>报名</span>
-                            </a>
-                                }
-                                else
-                                {
-                                    int acount = Convert.ToInt32(Model.People * 0.15);
-                                    if (acount > backupCount)
-                                    {
-                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
-                            </a>
-                                    }
-                                    else
-                                    {
-                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
-                                    }
-                                }
+                                <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>报名</span>
+                                </a>
                             }
                             else
                             {
-                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'V') "><span>志愿者报名</span>
-                            </a>
+                                <a href="javascript:void(0)"><span>报名已满！</span>
+                                </a>
                             }
                         }
                         else
                         {
                             <a href="javascript:void(0);"><span>您已报名！</span></a>
                         }
-                        @*@if (Model.Status == "Normal")
-                        {
-                            if (Model.EndDate >= DateTime.Now.AddDays(1))
-                            {
-                                if (Model.People > count)
-                                {
-                                    if (Model.AlreadyApply == "N")
-                                    {
-                            <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>进行中,报名</span>
-                            </a>
-                                    }
-                                    else
-                                    {
-                            <a href="javascript:void(0)"><span>进行中,已报名</span> </a>
-                                    }
-                                }
-                                else
-                                {
-                                    int acount = Convert.ToInt32(Model.People * 0.15);
-                                    if (acount > backupCount)
-                                    {
-                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
-                            </a>
-                                    }
-                                    else
-                                    {
-                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
-                                    }
-                                }
-                            }
-                            else
-                            {
-                            <a href="javascript:void(0)"><span>活动进行中</span> </a>
-                            }
-                        }
-                        else if (Model.Status == "End")
-                        {
-                            <a href="javascript:void(0)"><span>活动已结束</span> </a>
-                        }
-                        else
-                        {
-                            if (voluteerCount >= Model.VolunteerCount)
-                            {
-                                if (Model.People > count)
-                                {
-                                    if (Model.AlreadyApply == "N")
-                                    {
-                                        <a href="javascript:void(0)" onclick=" Show('@Model.ActiveID', 'N') "><span>报名</span>
-                                        </a>
-                                    }
-                                    else
-                                    {
-                                        <a href="javascript:void(0)"><span>已报名</span> </a>
-                                    }
-                                }
-                                else
-                                {
-                                    int acount = Convert.ToInt32(Model.People * 0.15);
-                                    if (acount > backupCount)
-                                    {
-                            <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'Y') "><span>候选人员报名</span>
-                            </a>
-                                    }
-                                    else
-                                    {
-                            <a href="javascript:void(0);"><span>报名已满！</span> </a>
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                <a href="javascript:void(0)"  onclick=" Show('@Model.ActiveID', 'V') "><span>志愿者报名</span>
-                                </a>
-                            }
-                        }*@
                     </div>
                     <div class="auto" style="margin-top: 5px;">
                         <a href="javascript:void(0);" onclick="Good('@Model.ActiveID')">赞一个</a> | 已获得<span

@@ -87,25 +87,27 @@
         <div class="row">
             <label>排序:</label>
             <input type="text" class="textbox" validtype="Required(排序)|PositiveInteger" name="SortOrder" value="@Model.SortOrder" /><cite>*</cite>
-            <label>活动联系：</label>
+            <label>活动联系人：</label>
 			<input type="text" class="textbox" name="ContactPerson" value="@Model.ContactPerson" validtype="required(活动联系人)|maxLen(100)" /><cite>*</cite>
         </div>
         <div class="row">
             <label>报名提醒事项: </label>
-            <textarea name="Remind">@Model.Remind</textarea>
+            <textarea name="Remind">@Model.Remind</textarea><cite></cite>
             <label>联系人电话：</label>
 			<input type="text" class="textbox" name="PersonPhone" value="@Model.PersonPhone" validtype="required(联系人电话)|Phone" /><cite>*</cite>
         </div>
 		<div class="row">
-            <label>报名提醒事项: </label>
-            <textarea name="Remind">@Model.Remind</textarea><cite></cite>
+            <label>优先完成志愿者报名：</label>
+            @Html.CheckBoxFor(m => m.IsVolunteerFirst)
+            @*<input type="checkbox" name="IsVolunteerFirst" id="IsVolunteerFirst" value="" />*@<cite></cite><cite></cite><cite></cite>
             <label>是否开启讨论: </label>
             <input type="checkbox" id="IsDiscuss" name="IsDiscuss" />
 		</div>
         <div class="row">
             <label>志愿者人数：</label>
-            <input class="textbox" name="VolunteerCount" value="@Model.VolunteerCount" validtype="required(志愿者人数)|PositiveInteger" />
-            <dfn>如需要志愿者,则正常报名会在志愿者报名完成后开启</dfn>
+            <input class="textbox" name="VolunteerCount" value="@Model.VolunteerCount" validtype="required(志愿者人数)|PositiveInteger" /><cite></cite>
+            
+            @*<dfn>如需要志愿者,则正常报名会在志愿者报名完成后开启</dfn>*@
         </div>
 	</div>
 </div>

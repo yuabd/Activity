@@ -112,10 +112,10 @@ namespace Activity.Models
         /// 志愿者人数
         /// </summary>
         public int VolunteerCount { get; set; }
-        ///// <summary>
-        ///// 是否优先报名
-        ///// </summary>
-        //public bool IsVolunteerFirst { get; set; }
+        /// <summary>
+        /// 是否优先报名
+        /// </summary>
+        public bool IsVolunteerFirst { get; set; }
 
         /// <summary>
         /// 图片文件夹

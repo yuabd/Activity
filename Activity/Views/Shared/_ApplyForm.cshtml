@@ -18,18 +18,17 @@
 			<input validtype="required(参加人数)|NumP4" class="easyui-validatebox validatebox-text" name="People" value="1" id="People" type="text" /><cite>*</cite>
 		</div>
 		<div class="row">
+            <label>报名类型：</label>
+            <select id="Backup" name="Backup">
+                
+            </select>
+            <p style="margin: 5px 0;" id="needPeople"></p>
+        </div>
+		<div class="row">
 			<label>备注：</label>
 			<textarea class="easyui-validatebox validatebox-text"
 			          validtype="maxLen(300)" name="Content" id="Content"></textarea>
 		</div>
-		<div class="row">
-            <label>报名类型：</label>
-            <select id="Backup" name="Backup">
-                <option value="N" id="TypeNormal">常规报名</option>
-                @*<option value="Y" id="TypeHoubu">候补报名</option>*@
-                <option value="V" id="TypeVolunteer">报名志愿者</option>
-            </select>
-        </div>
         <p style="color: Red; margin: 5px 0;" id="remind"></p>
 		<div class="row">
 			<a href="javascript:void(0);" class="button" onclick="apply()">确认报名</a>

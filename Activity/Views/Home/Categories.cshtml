@@ -18,16 +18,29 @@
                 }
                 else {
                     $("#ActiveID").val(id);
-                    $("#Backup").val(backup);
+                    //$("#Backup").val(backup);
                     HammerAjax('/Login/UserInfo', { id: id }, function (data) {
                         $("#Name").val(data.UserID);
                         $("#Contact").val(data.Contact);
+                        $("#needPeople").html(data.NeedPeople);
                         $("#remind").html(data.Remind);
+                        $("#Backup").html(data.Option);
                     });
-
+                    FixApplyForm();
                     $("#applyForm").show();
                 }
             });
+        }
+
+        function FixApplyForm() {
+            var winHeight = document.documentElement.clientHeight;
+            var winWidth = document.documentElement.clientWidth;
+
+            var height = $("#applyForm").height();
+            var width = $("#applyForm").width();
+
+            $("#applyForm").css("top", (winHeight - height) / 2);
+            $("#applyForm").css("left", (winWidth - width) / 2);
         }
 
         function Hide() {
@@ -92,7 +105,16 @@
                         <div class="btn_yellow mt10">
                             @if (item.AlreadyApply == "N")
                             {
-                                if (voluteerCount >= item.VolunteerCount)
+                                if (item.Applies.Count < (int)((item.People * 1.15) + item.VolunteerCount))
+                                {
+                                    <a href="javascript:void(0)" onclick=" Show('@item.ActiveID', 'N') "><span>报名</span>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)"><span>报名已满！</span> </a>
+                                }
+                                @*if (voluteerCount >= item.VolunteerCount)
                                 {
                                     if (item.People > count)
                                     {
@@ -117,7 +139,7 @@
                                 {
                                 <a href="javascript:void(0)"  onclick=" Show('@item.ActiveID', 'V') "><span>志愿者报名</span>
                                 </a>
-                                }
+                                }*@
                             }
                             else
                             {
